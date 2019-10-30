@@ -1,0 +1,266 @@
+﻿# Launches the calculator by clicking on the pinned taskbar icon.
+-- Prerequisite: program is closed and icon is pinned to taskbar
+on launchProgram
+    clickInactiveTaskbarIcon
+    
+    // two-element validation to ensure calculator appears on-screen
+    put imgPath("calc_menu_button") into menuButton
+    put imageFound(image: menuButton, waitFor: 5.0) into menuButtonAppeared
+    if menuButtonAppeared then put foundImageLocation() into menuButtonLocation
+    
+    put imgPath("calc_memory_store_button") into memoryStoreButton
+    put imageFound(image: memoryStoreButton, waitFor: 0.0) into memoryButtonAppeared
+    if memoryButtonAppeared then put foundImageLocation() into memoryButtonLocation
+    assert that menuButtonAppeared and memoryButtonAppeared	
+    if memoryButtonLocation - menuButtonLocation does not equal (342, 212) then resizeProgramWindow
+    restrictSearchRectangleToProgramWindow
+end launchProgram
+
+
+# Searches for and clicks the INACTIVE Windows taskbar icon for the calculator.
+on clickInactiveTaskbarIcon
+    put <<systems/windows>> into windows
+    put (windows).taskbarIcon("calculator") & "inactive/" into inactiveTaskbarIcon
+    put (windows).taskbarRectangle() into taskbarRect
+    click(image: inactiveTaskbarIcon, searchRectangle: taskbarRect)
+end clickInactiveTaskbarIcon
+
+
+# Resizes calculator program to reduce test failures due to scaling mismatches.
+on resizeProgramWindow
+    restoreProgramWindow
+    
+    // find the right-side of program by looking for History tab
+    put imgPath("calc_close_window_button") into closeButton
+    put imgPath("calc_history_tab") into historyTab
+    if imageFound(historyTab) // use close button as reference
+        put imageLocation(closeButton) + (25, 50) into rightEdge
+    else	// use history button as reference
+        put imgPath("calc_history_button") into historyButton
+        put imageLocation(historyButton) + (20, 0) into rightEdge
+    end if
+    
+    // drag right edge to proper width
+    put imgPath("calc_menu_button") into menuButton
+    put (imageLocation(menuButton).x + 535, rightEdge.y) into desiredWidth
+    drag rightEdge
+    drop desiredWidth
+    
+    // drop top edge to proper height
+    put imageRectangle(closeButton).topLeft() + (-100, 0) into topEdge
+    put imgPath("calc_numpad") & "0" into numpadZero
+    put imageLocation(image: numpadZero, scale: 0.7 to 1.2 by 0.1) into numpadZeroLocation
+    put (topEdge.x, numpadZeroLocation.y - 790) into desiredHeight
+    
+    drag topEdge
+    drop desiredHeight
+    
+    put imageLocation(closeButton) + (-200, 0) into headerBar
+    put (remoteScreenSize().x / 2, 100) into topMiddle
+    drag headerBar
+    drop topMiddle
+    
+end resizeProgramWindow
+
+
+# Restores calculator window (if possible).
+on restoreProgramWindow
+    put remoteScreenSize() into screenResolution
+    put (screenResolution.x * 11/12, 0) into topLeftAnchor
+    put (screenResolution.x, 50) into bottomRightAnchor
+    put (topLeftAnchor, bottomRightAnchor) into topRightCorner
+    
+    put imgPath("calc_restore_window_button") into restoreButton
+    if imageFound(image: restoreButton, waitFor: 5.0, searchRectangle: topRightCorner) then click foundImageLocation()
+    
+    put imgPath("calc_maximize_window_button") into maximizeButton
+    assert that imageFound(image: maximizeButton, waitFor: 5.0)
+end restoreProgramWindow
+
+
+# Closes all instances of calculator through the taskbar icon's right-click menu.
+on closeProgram
+    put <<systems/windows>> into windows
+    put (windows).taskbarIcon("calculator") & "active/" into activeTaskbarIcon
+    (windows).rightClickTaskbarIconAndCloseProgram(activeTaskbarIcon)
+end closeProgram
+
+
+# Sets the global searchRectangle property to rectangle for calculator program window.
+on restrictSearchRectangleToProgramWindow
+    logWarning "TODO: This should be changed to return a rectangle instead of using global property."
+    put localized("calc_window_title") into calculatorTitle
+    put imageLocation(text: calculatorTitle, caseSensitive: yes) into titleBarLocation
+    put titleBarLocation + (-35, -15) into topLeftAnchor
+    
+    put imgPath("calc_close_window_button") into closeButton
+    put imageLocation(closeButton).x + 20 into rightAnchor
+    put imgPath("calc_operators") & "equals/" into equalOperator
+    put imageLocation(equalOperator).y + 45 into bottomAnchor
+    put (rightAnchor, bottomAnchor) into bottomRightAnchor
+    
+    set the searchRectangle to (topLeftAnchor, bottomRightAnchor)
+end restrictSearchRectangleToProgramWindow
+
+
+# Validates both button states for all operator buttons.
+on checkOperators
+    put imgPath("calc_operators") into operatorDirectory
+    put ("divide", "multiply", "subtract", "add", "equals") into calcOperators
+    
+    repeat for each item operator in calcOperators
+        put operatorDirectory & operator into targetOperator
+        moveTo targetOperator
+        wait 0.5 // allows UI to update
+        
+        put foundImageLocation() + (-15, -15) into buttonBackground
+        put colorAtLocation(buttonBackground) into buttonBackgroundColor
+        put hexColor("calc_button_hover") into hoverButtonColor
+        assert that buttonBackgroundColor equals hoverButtonColor
+        put !"Validated the button states for the '[[operator]]' button."
+    end repeat
+    
+    logSuccess "Validated operator button states."
+end checkOperators
+
+
+# Validates both button states for all numpad buttons.
+on checkNumpad
+    put imgPath("calc_numpad") into numpadDirectory
+    repeat for each item number in (0..9 as a list)
+        put numpadDirectory & number & "/default/" into targetButton
+        moveTo targetButton
+        wait 0.5 // allows UI to update
+        
+        put foundImageLocation() + (-15, -15) into buttonBackground
+        put colorAtLocation(buttonBackground) into buttonBackgroundColor
+        put hexColor("calc_button_hover") into hoverButtonColor
+        assert that buttonBackgroundColor equals hoverButtonColor
+        put !"Validated the button states for the '[[number]]' button."
+    end repeat
+    
+    logSuccess "Validated numpad button states."
+end checkNumpad
+
+
+# Presses the clear button, regardless of state.
+on pressClearButton
+    put imgPath("calc_clear_button") into clearButton
+    click clearButton
+end pressClearButton
+
+
+# Presses the decimal button, regardless of state.
+on pressDecimalButton
+    put imgPath("calc_decimal_button") into decimalButton
+    click decimalButton
+end pressDecimalButton
+
+
+# Presses the defined numpad button, regardless of state.
+on pressNumber targetNumber
+    put imgPath("calc_numpad") & targetNumber into numberButton
+    click numberButton
+end pressNumber
+
+
+# Presses the defined operator button, regardless of state.
+on pressOperator targetOperator
+    put imgPath("calc_operators") & targetOperator into operatorButton
+    click operatorButton
+end pressOperator
+
+
+# Returns a rectangle for the calculator's output area to be used in readText() calls.
+function resultsRectangle
+    put imgPath("calc_menu_button") into menuButton
+    put imageLocation(menuButton) into menuButtonLocation
+    put menuButtonLocation + (-15, 50) into topLeftAnchor
+    
+    put imgPath("calc_history_button") into historyButton
+    put imageRectangle(historyButton).right() into rightAnchor
+    put imgPath("calc_memory_store_button") into memoryStoreButton
+    put imageRectangle(memoryStoreButton).top() - 10 into bottomAnchor
+    put (rightAnchor, bottomAnchor) into bottomRightAnchor
+    
+    return (topLeftAnchor, bottomRightAnchor)
+end resultsRectangle
+
+
+# Returns the value currently displayed on system calculator.
+to displayedValue
+    put readText(resultsRectangle(), validCharacters: "0123456789e,.-+") into currentValue
+    return currentValue
+end displayedValue
+
+
+# Performs the addition of two numbers on the calculator, returning the result displayed on-screen.
+function addedTo xInt, yInt
+    return performCalculation(yInt, "add", xInt)
+end addedTo
+
+
+# Performs the subtraction of two numbers on the calculator, returning the result displayed on-screen.
+function subtractedFrom xInt, yInt
+    return performCalculation(yInt, "subtract", xInt)
+end subtractedFrom
+
+
+# Performs the multiplication of two numbers on the calculator, returning the result displayed on-screen.
+function multipliedBy xInt, yInt
+    return performCalculation(yInt, "multiply", xInt)
+end multipliedBy
+
+
+# Performs the division of two numbers on the calculator, returning the result displayed on-screen.
+function dividedBy xInt, yInt
+    return performCalculation(xInt, "divide", yint)
+end dividedBy
+
+
+# Performs the defined calculation against the calculator, returning the result displayed on-screen.
+function performCalculation xInt, targetOperator, yInt
+    enterNumber xInt
+    pressOperator targetOperator
+    enterNumber yInt
+    pressOperator "equals"
+    return displayedValue()
+end performCalculation
+
+
+# Enters each individual component of the defined number into the system calculator.
+on enterNumber digits
+    put each character of digits as text into digitList
+    repeat for each item digit of digitList
+        if digit is a number then pressNumber digit
+        else pressDecimalButton
+    end repeat
+end enterNumber
+
+
+##################################    EAI LOGIC      ##################################
+
+# Reduces incoming current total by one (1), and returns new total to AI model.
+to decrementRemainingCount currentTotal
+    if currentTotal is greater than 0 then return (currentTotal - 1)
+    else return currentTotal
+end decrementRemainingCount
+
+
+# Used within the 'Numpad' state to reset the maximum number of digits on either side of an equation.
+to setRemainingDigits maxDigits
+    return maxDigits
+end setRemainingDigits
+
+
+# Logs the total to the console output.
+-- TODO: replace with validation method
+on logToConsole rawInput
+    log rawInput
+end logToConsole
+
+
+# Returns boolean value for if division is possible, when entering the 'Operators' state.
+to isDivisionPossible currentPossibility, nonZeroEntered
+    return (currentPossibility and nonZeroEntered)
+end isDivisionPossible

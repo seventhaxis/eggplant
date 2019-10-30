@@ -1,0 +1,28 @@
+﻿params textKey, arguments...
+
+set the duplicatePropertyKeyMode to error
+set the strictProperties to true
+
+set localizations to {
+
+    ### CALCULATOR
+    calc_window_title: "Calculator",
+    
+    
+    ### WINDOWS
+    win_taskbar_icon_menu_close_window: "Close window",
+    win_taskbar_icon_menu_close_all_windows: "Close all windows",
+
+}
+
+put localizations.(textKey) into targetLocalization
+
+// Allows for the use and substitution of string format placeholders.
+try
+    repeat for each item arg in arguments
+        put "$" & (the counter - 1) into iterKey // e.g. $0
+        replace iterKey with arg in targetLocalization
+    end repeat
+end try
+
+return targetLocalization

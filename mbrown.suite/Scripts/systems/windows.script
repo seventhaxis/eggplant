@@ -1,0 +1,62 @@
+﻿# Shortcut for returning Windows-specific image paths.
+-- Example: put winPath("win_taskbar_icon_menu_close_button")
+function winPath imageKey
+    return imgPath(imageKey, "windows")
+end winPath
+
+
+# Returns the image path for taskbar icon from keyed string.
+-- Example: put taskbarIcon("calculator")
+function taskbarIcon targetProgram
+    return imgPath("win_taskbar_icons", "windows", targetProgram)
+end taskbarIcon
+
+
+# Returns a rectangle representing the standard Windows 10 taskbar area.
+-- Notes: System scale is set to 100% and large taskbar icons are enabled.
+function taskbarRectangle
+    put remoteScreenSize() into screenResolution
+    put (0, screenResolution.height - 40) into topLeftAnchor // (0, 1040) for 1080p
+    put screenResolution into botRightAnchor
+    return (topLeftAnchor, botRightAnchor)
+end taskbarRectangle
+
+
+# Closes all instances of program by right-clicking the corresponding taskbar icon.
+-- Example: rightClickTaskbarIconAndCloseProgram(taskbarIcon(calculator) & "active/")
+on rightClickTaskbarIconAndCloseProgram taskbarIcon
+    if imageFound(imageName: taskbarIcon, waitFor: 0, searchRectangle: taskbarRectangle())
+        rightClick foundImageLocation()
+        
+        // restrict search rectangle to right-click menu (rough estimate)
+        put foundImageLocation() + (-180, -300) into topLeftAnchor
+        put foundImageLocation() + (180, 0) into botRightAnchor
+        put (topLeftAnchor, botRightAnchor) into rightClickMenuRect
+        
+        // defines possible options to close all instances of program
+        set menuCloseButton to {
+            imageName: winPath("win_taskbar_icon_menu") & "close/",
+            waitFor: 5.0,
+            searchRectangle: rightClickMenuRect,
+        }
+        
+        set closeWindowText to {
+            text: localized("win_taskbar_icon_menu_close_window"),
+            waitFor: 0,
+            searchRectangle: rightClickMenuRect,
+        }
+        
+        set closeAllWindowsText to {
+            text: localized("win_taskbar_icon_menu_close_all_windows"),
+            waitFor: 0,
+            searchRectangle: rightClickMenuRect,
+        }
+        
+        // checks for any matches for various program termination options
+        if helpers.anyImageFound(menuCloseButton, closeWindowText, closeAllWindowsText)    
+            click foundImageLocation()
+        else
+            suiteError.throwException(IMG_NOT_FOUND, "Unable to locate close button or text within the taskbar icon's right-click menu.")
+        end if
+    end if
+end rightClickTaskbarIconAndCloseProgram

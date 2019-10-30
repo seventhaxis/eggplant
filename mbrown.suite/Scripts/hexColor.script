@@ -1,0 +1,14 @@
+﻿params hexKey
+
+set the duplicatePropertyKeyMode to error
+set the strictProperties to true
+set the colorFormat to HTML
+
+set colorCodes to {
+
+    ### CALCULATOR
+    calc_button_hover: "#E6E6E6",
+
+}
+
+return colorCodes.(hexKey)

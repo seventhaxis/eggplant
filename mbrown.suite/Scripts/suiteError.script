@@ -1,0 +1,20 @@
+﻿params errorCode
+
+set the duplicatePropertyKeyMode to error
+set the strictProperties to true
+
+set errorName to {
+    "IMG_NOT_FOUND": "Text or Image(s) Not Found",
+}
+
+return errorName.(errorCode)
+
+
+#
+on throwException customException
+    put customException into (errorCode, customReason)
+    put suiteError(errorCode) into exceptionName
+    put formattedTime("[yr][mo][da].[hour24][min].[se]") & "-" into timeStamp
+    captureScreen(name: timeStamp & exceptionName)
+    throw exceptionName, (newline & customReason)
+end throwException
