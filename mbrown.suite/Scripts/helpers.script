@@ -2,10 +2,10 @@
     set the strictProperties to false
     
     // if called with only an image path, turn it into a property list
-    if searchMetrics is NOT a property list then set searchMetrics to (image: searchMetrics)
+    if searchMetrics is NOT a property list then put (image: searchMetrics) into searchMetrics
     
     put property waitFor of searchMetrics into timeoutValue
-    if timeoutValue is empty then set timeoutValue to 10.0
+    if timeoutValue is empty then put 10.0 into timeoutValue
     put now + timeoutValue into endTime
     put 0 into searchMetrics.waitFor
     
