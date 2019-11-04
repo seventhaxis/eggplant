@@ -1,17 +1,17 @@
 #### Index
 
-1. [Naming & Syntax Conventions](#)
-    - [Defining Variables & Setting Values](#)
-    - [Handlers & Variables](#)
-    - [Calling Nested Scripts](#)
-    - [Defining Search Rectangles](#)
-    - [Single-Line Expressions Inside Conditionals](#)
-2. [Handling Image Paths](#)
-    - [Adding New Keys](#)
-    - [Appending to Returned Value](#)
-    - [Keyed Image Paths](#)
-    - [Naming Convention for Differing Image States](#)
-3. [Localizations, Hex Codes & SUT Information](#)
+1. [Naming & Syntax Conventions](#naming--syntax-conventions)
+    - [Defining Variables & Setting Values](#defining-variables--setting-values)
+    - [Handlers & Variables](#handlers--variables)
+    - [Calling Nested Scripts](#calling-nested-scripts)
+    - [Defining Search Rectangles](#defining-search-rectangles)
+    - [Single-Line Expressions Inside Conditionals](#single-line-expressions-inside-conditionals)
+2. [Handling Image Paths](#handing-image-paths)
+    - [Adding New Keys](#adding-new-keys)
+    - [Appending to Returned Value](#appending-to-returned-value)
+    - [Keyed Image Paths](#keyed-image-paths)
+    - [Naming for Various Image States](#naming-for-various-image-states)
+3. [Localizations, Hex Codes & SUT Information](#localizations-hex-codes--sut-information)
 
 ## Naming & Syntax Conventions
 
@@ -40,7 +40,7 @@ Although SenseTalk and Eggplant Functional default to PascalCase, handlers and v
 
 ### Calling Nested Scripts
 
-Scripts that are nested inside folders should be called with the multi-line string operator. If used repeatedly, put the script path into a variable and reference variable inside single-item tuple.
+Scripts that are nested inside folders should be called with the multi-line string operator. If used repeatedly, put the script path into a variable and reference using dot syntax.
 
 ```
 put <<applications/calculator>> into calculator
@@ -125,7 +125,7 @@ put imgPath("win_taskbar_icons")                             // systems/$0/taskb
 put imgPath("win_taskbar_icons", "windows", "calculator")    // systems/windows/taskbar_icons/calculator/
 ```
 
-### Naming Convention for Differing Image States
+### Naming for Various Image States
 
 When necessary, use the appropriate adjective in the list below when capturing images of element states, ordered by an example folder hierarchy:
 
