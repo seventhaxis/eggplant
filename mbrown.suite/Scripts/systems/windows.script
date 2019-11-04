@@ -17,8 +17,8 @@ end taskbarIcon
 function taskbarRectangle
     put remoteScreenSize() into screenResolution
     put (0, screenResolution.height - 40) into topLeftAnchor // (0, 1040) for 1080p
-    put screenResolution into botRightAnchor
-    return (topLeftAnchor, botRightAnchor)
+    put screenResolution into bottomRightAnchor
+    return (topLeftAnchor, bottomRightAnchor)
 end taskbarRectangle
 
 
@@ -53,10 +53,7 @@ on rightClickTaskbarIconAndCloseProgram taskbarIcon
         }
         
         // checks for any matches for various program termination options
-        if helpers.anyImageFound(menuCloseButton, closeWindowText, closeAllWindowsText)    
-            click foundImageLocation()
-        else
-            suiteError.throwException(IMG_NOT_FOUND, "Unable to locate close button or text within the taskbar icon's right-click menu.")
-        end if
+        assert that helpers.anyImageFound(menuCloseButton, closeWindowText, closeAllWindowsText)    
+        click foundImageLocation()
     end if
 end rightClickTaskbarIconAndCloseProgram

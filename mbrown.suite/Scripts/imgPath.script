@@ -3,8 +3,8 @@
 set the duplicatePropertyKeyMode to error
 set the strictProperties to true
 
-set calcPath to "applications/calculator/"
-set systemPath to "systems/$0/"
+put "applications/calculator/" into calcPath
+put"systems/$0/" into systemPath
 
 set imagePaths to {
     
