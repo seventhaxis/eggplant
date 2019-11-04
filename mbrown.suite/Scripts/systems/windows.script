@@ -53,10 +53,7 @@ on rightClickTaskbarIconAndCloseProgram taskbarIcon
         }
         
         // checks for any matches for various program termination options
-        if helpers.anyImageFound(menuCloseButton, closeWindowText, closeAllWindowsText)    
-            click foundImageLocation()
-        else
-            suiteError.throwException(IMG_NOT_FOUND, "Unable to locate close button or text within the taskbar icon's right-click menu.")
-        end if
+        assert that helpers.anyImageFound(menuCloseButton, closeWindowText, closeAllWindowsText)    
+        click foundImageLocation()
     end if
 end rightClickTaskbarIconAndCloseProgram
