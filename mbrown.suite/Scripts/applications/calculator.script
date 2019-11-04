@@ -117,7 +117,7 @@ on checkOperators
         put colorAtLocation(buttonBackground) into buttonBackgroundColor
         put hexColor("calc_button_hover") into hoverButtonColor
         assert that buttonBackgroundColor equals hoverButtonColor
-        put !"Validated the button states for the '[[operator]]' button."
+        log !"Validated the button states for the '[[operator]]' button."
     end repeat
     
     logSuccess "Validated operator button states."
@@ -128,7 +128,7 @@ end checkOperators
 on checkNumpad
     put imgPath("calc_numpad") into numpadDirectory
     repeat for each item number in (0..9 as a list)
-        put numpadDirectory & number & "/default/" into targetButton
+        put numpadDirectory & !"[[number]]/default/" into targetButton
         moveTo targetButton
         wait 0.5 // allows UI to update
         
@@ -136,7 +136,7 @@ on checkNumpad
         put colorAtLocation(buttonBackground) into buttonBackgroundColor
         put hexColor("calc_button_hover") into hoverButtonColor
         assert that buttonBackgroundColor equals hoverButtonColor
-        put !"Validated the button states for the '[[number]]' button."
+        log !"Validated the button states for the '[[number]]' button."
     end repeat
     
     logSuccess "Validated numpad button states."
