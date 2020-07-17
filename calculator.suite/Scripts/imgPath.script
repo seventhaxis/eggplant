@@ -1,0 +1,42 @@
+﻿params imageKey, arguments...
+
+set the duplicatePropertyKeyMode to error
+set the strictProperties to true
+
+put "applications/calculator/" into calcPath
+put "systems/$0/" into systemPath
+
+set imagePaths to {
+	
+	### CALCULATOR
+	calc_clear_button: calcPath & "clear_button",
+	calc_close_window_button: calcPath & "close_window_button",
+	calc_decimal_button: calcPath & "decimal_button",
+	calc_history_button: calcPath & "history_button",
+	calc_history_tab: calcPath & "history_tab",
+	calc_maximize_window_button: calcPath & "maximize_window_button",
+	calc_memory_store_button: calcPath & "memory_store_button",
+	calc_menu_button: calcPath & "menu_button",
+	calc_minimize_window_button: calcPath & "minimize_window_button",
+	calc_numpad: calcPath & "numpad",
+	calc_operators: calcPath & "operators",
+	calc_restore_window_button: calcPath & "restore_window_button",
+	
+	
+	### SYSTEMS > WINDOWS
+	win_taskbar_icon_menu: systemPath & "buttons/taskbar_icon_right_click_menu",
+	win_taskbar_icons: systemPath & "taskbar_icons/$1",
+
+}
+
+put imagePaths.(imageKey) & "/" into targetPath
+
+// Allows for the use and substitution of string format placeholders.
+try
+	repeat for each item arg in arguments
+		put "$" & (the counter - 1) into iterKey // e.g. $0
+		replace iterKey with arg in targetPath
+	end repeat
+end try
+
+return targetPath

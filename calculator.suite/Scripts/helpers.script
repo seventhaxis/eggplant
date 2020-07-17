@@ -1,0 +1,26 @@
+﻿function imageDisappeared searchMetrics
+    set the strictProperties to false
+    
+    // if called with only an image path, turn it into a property list
+    if searchMetrics is NOT a property list then put (image: searchMetrics) into searchMetrics
+    
+    put property waitFor of searchMetrics into timeoutValue
+    if timeoutValue is empty then put 10.0 into timeoutValue
+    put now + timeoutValue into endTime
+    put 0 into searchMetrics.waitFor
+    
+    repeat until endTime
+        if not imageFound(searchMetrics) then return true
+    end repeat
+    
+    return false
+end imageDisappeared
+
+
+# Consumes a list of search metrics, breaking and returning true if any are found.
+function anyImageFound searchList
+    repeat for each item targetItem of searchList
+        if imageFound(targetItem) then return true
+    end repeat
+    return false
+end anyImageFound
