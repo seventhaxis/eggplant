@@ -1,16 +1,13 @@
 {
-  "lastmodifieddate" : 1607372007.5043678,
-  "ocrcapturestring" : "□",
+  "lastmodifieddate" : 1610443342.804589,
   "testlocationdata" : [
     {
-      "connectionserverid" : "192.168.216.7",
+      "name" : "taskbar_icon\/inactive\/hover\/win10.png",
       "sutinfo" : {
         "type" : "Unknown VNC"
       },
-      "connectionname" : "Local: Windows 10 Pro (x64)",
-      "connectionportnum" : 5900,
-      "connectiontype" : "VNC",
-      "capturedocrtext" : "□",
+      "connectionname" : "unRAID: Windows 10 Pro (x64)",
+      "connectionportnum" : 5901,
       "properties" : {
         "Rotate" : 0,
         "Scale" : "    1",
@@ -21,7 +18,7 @@
         "CropRectangle" : "[0,0,0,0]"
       },
       "type" : 1,
-      "name" : "systems\/windows\/taskbar_icons\/calculator\/active\/background\/win10b.png",
+      "connectionserverid" : "192.168.7.231",
       "capturerect" : [
         252,
         1043,
@@ -30,7 +27,7 @@
       ]
     }
   ],
-  "createddate" : 1607371988.0272021,
+  "createddate" : 1610443331.9189801,
   "lastfoundlocation" : [
     252,
     1043,
@@ -43,6 +40,6 @@
     37,
     37
   ],
-  "lastfounddate" : 1610443916.435832,
-  "name" : "systems\/windows\/taskbar_icons\/calculator\/active\/background\/win10b"
+  "lastfounddate" : 1610444890.0878959,
+  "name" : "taskbar_icon\/inactive\/hover\/image0001"
 }

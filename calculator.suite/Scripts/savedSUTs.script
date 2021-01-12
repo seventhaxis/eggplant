@@ -6,9 +6,9 @@ set the strictProperties to true
 set systems to {
 	
 	### LOCAL
-	local_win10pro: {
-		serverID: "192.168.216.7",
-		portNum: 5900,
+	unraid_win10pro: {
+		serverID: "192.168.7.231",
+		portNum: 5901,
 		password: "3ggpl4nt",
 		type: "VNC"
 	},
@@ -19,7 +19,7 @@ return systems.(shortname)
 
 
 # Establishes connection to saved SUT via shortname.
--- Example: savedSUTs.connectTo(local_win10pro)
+-- Example: savedSUTs.connectTo(unraid_win10pro)
 on connectTo systemShortname
 	put savedSUTs(systemShortname) into targetSystem
 	connect targetSystem
