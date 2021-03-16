@@ -1,0 +1,22 @@
+﻿{
+    CaptureDate = "2020-07-17 16:37:28 +0000";
+    CaptureHost = "Local: Windows 10 Pro (x64)";
+    CaptureScreenSize =     (
+        1920,
+        1080
+    );
+    HasAlpha = 1;
+    HotSpotX = 18;
+    HotSpotY = 18;
+    ImageDescription = {length = 0, bytes = 0x};
+    ImageTolerance = 25;
+    LastKnownLocationX = 0;
+    LastKnownLocationY = 0;
+    OriginalLocationX = 252;
+    OriginalLocationY = 1043;
+    Precise = 0;
+    Pulsing = 0;
+    Scale = 1;
+    tags =     (
+    );
+}

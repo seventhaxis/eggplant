@@ -1,0 +1,23 @@
+﻿{
+    CaptureDate = "2021-01-12 09:22:02 +0000";
+    CaptureHost = "unRAID: Windows 10 Pro (x64)";
+    CaptureScreenSize =     (
+        1920,
+        1080
+    );
+    HasAlpha = 1;
+    HotSpotX = 18;
+    HotSpotY = 18;
+    ImageDescription = {length = 0, bytes = 0x};
+    ImageTolerance = 25;
+    LastKnownLocationX = 0;
+    LastKnownLocationY = 0;
+    OriginalLocationX = 252;
+    OriginalLocationY = 1043;
+    Precise = 0;
+    Pulsing = 0;
+    Scale = 1;
+    SearchObjectName = "taskbar_icon/inactive/hover/image0001";
+    tags =     (
+    );
+}
