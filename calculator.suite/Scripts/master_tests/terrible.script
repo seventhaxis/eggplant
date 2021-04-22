@@ -1,0 +1,118 @@
+﻿// The aim of this test is to ensure suite alignment with the target SUT for the purpose of EAI executions.
+-- Prerequisite: connected to a standardized disk image
+
+# Close any open instance(s) and launch a fresh program.
+put remoteScreenSize() into screenResolution
+put (0, screenResolution.height - 40) into topLeftAnchor // (0, 1040) for 1080p
+put screenResolution into bottomRightAnchor
+put [topLeftAnchor, bottomRightAnchor] into taskbarRect
+
+if imageFound(image: "taskbar_icon/active/", waitFor: 0, searchRectangle: taskbarRect)
+	rightClick foundImageLocation()
+	
+	// restrict search rectangle to right-click menu (rough estimate)
+	put foundImageLocation() + [-125, -250] into topLeftAnchor
+	put foundImageLocation() + [125, 0] into botRightAnchor
+	put (topLeftAnchor, botRightAnchor) into rightClickMenuRect
+	
+	if imageFound(text: "Close all windows", caseSensitive: true, waitFor: 3.0, searchRectangle: rightClickMenuRect)
+		click foundImageLocation()
+	else
+		click{text: "Close window", caseSensitive: true, waitFor: 0, searchRectangle: rightClickMenuRect}
+	end if
+end if
+
+click(image: "taskbar_icon/inactive/", searchRectangle: taskbarRect)
+
+// two-element validation to ensure calculator appears on-screen
+assert that imageFound(image: "menu_button/", waitFor: 5.0)
+put foundImageLocation() into menuButtonLocation
+assert that imageFound(image: "memory_store_button/", waitFor: 0.0)
+put foundImageLocation() into memoryButtonLocation	
+if memoryButtonLocation - menuButtonLocation does not equal [342, 212]
+	put remoteScreenSize() into screenResolution
+	put (screenResolution.x * 11/12, 0) into topLeftAnchor
+	put (screenResolution.x, 50) into bottomRightAnchor
+	put (topLeftAnchor, bottomRightAnchor) into topRightCorner
+	
+	if imageFound(image: "restore_window_button/", searchRectangle: topRightCorner, waitFor: 0) then click foundImageLocation()
+	
+	assert that imageFound(image: "maximize_window_button/", waitFor: 5.0)
+	
+	// find the right-side of program by looking for History tab
+	put "close_window_button/" into closeButton
+	if imageFound("history_tab/") // use close button as reference
+		put imageLocation(closeButton) + (25, 50) into rightEdge
+		else	 // use history button as reference
+		put imageLocation("history_button/") + (20, 0) into rightEdge
+	end if
+	
+	// drag right edge to proper width
+	put (imageLocation("menu_button/").x + 535, rightEdge.y) into desiredWidth
+	drag rightEdge
+	drop desiredWidth
+	
+	// drop top edge to proper height
+	put imageRectangle(closeButton).topLeft() + (-100, 0) into topEdge
+	put "numpad/0/" into numpadZero
+	put imageLocation(image: numpadZero, scale: 0.7 to 1.2 by 0.1) into numpadZeroLocation
+	put (topEdge.x, numpadZeroLocation.y - 800) into desiredHeight
+	
+	drag topEdge
+	drop desiredHeight
+	
+	put imageLocation(closeButton) + (-200, 0) into headerBar
+	put (remoteScreenSize().x / 2, 100) into topMiddle
+	drag headerBar
+	drop topMiddle
+end if
+
+logWarning "TODO: This should be changed to return a rectangle instead of using global property."
+put imageLocation(text: "Calculator", caseSensitive: yes) into titleBarLocation
+put titleBarLocation + [-35, -15] into topLeftAnchor
+put imageLocation("close_window_button/").x + 20 into rightAnchor
+put imageLocation("operators/equals/").y + 45 into bottomAnchor
+put [rightAnchor, bottomAnchor] into bottomRightAnchor
+set the searchRectangle to [topLeftAnchor, bottomRightAnchor]
+
+# Ensures calculator clear button works propertly while resetting program to known initial state.
+put "clear_button/" into clearButton
+click clearButton
+
+put imageLocation("menu_button/") + [-15, 50] into topLeftAnchor
+put imageRectangle("history_button/").right() into rightAnchor
+put imageRectangle("memory_store_button/").top() - 10 into bottomAnchor
+put [rightAnchor, bottomAnchor] into bottomRightAnchor
+put [topLeftAnchor, bottomRightAnchor] into resultsRectaangle
+assert that readText(resultsRectangle, validCharacters: "0123456789e,.-+", contrast: on, contrastColor: "#000000") equals zero
+
+# Validate button states and background colors by looping through each element.
+moveTo [0, 0]
+put ["divide", "multiply", "subtract", "add", "equals"] into calcOperators
+repeat for each item operator in calcOperators
+	put !"operators/[[operator]]/" into targetOperator
+	moveTo targetOperator & "default/"
+	waitFor 5.0, targetOperator & "hover/"
+	log !"Validated the button states for the '[[operator]]' button."
+end repeat
+
+logSuccess "Validated operator button states."
+
+
+moveTo [0, 0]
+repeat for each item number in (0..9 as a list)
+	put !"numpad/[[number]]/" into targetButton
+	moveTo targetButton & "default/"
+	waitFor 5.0, targetButton & "hover/"
+	log !"Validated the button states for the '[[number]]' button."
+end repeat
+
+logSuccess "Validated numpad button states."
+
+# Demonstrates ability to validate on-screen results with expected calculated results.
+assert that calculator.performCalculation(14, "add", 2) equals 16
+assert that calculator.subtractedFrom(8, 3) equals -5
+assert that calculator.multipliedBy(4, 9) equals 36
+assert that calculator.dividedBy(60, 1.5) equals 40
+
+calculator.closeProgram
