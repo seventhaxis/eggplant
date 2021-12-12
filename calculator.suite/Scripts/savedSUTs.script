@@ -1,11 +1,8 @@
 ﻿params shortname
 
-set the duplicatePropertyKeyMode to error
-set the strictProperties to true
-
 set systems to {
 	
-	### LOCAL
+	### INTRANET
 	unraid_win10pro: {
 		serverID: "192.168.7.202",
 		portNum: 5901,
@@ -15,12 +12,29 @@ set systems to {
 
 }
 
-return systems.(shortname)
+return systems
+
+
+# Returns the value associated with defined key.
+function withKey systemShortname
+	set the duplicatePropertyKeyMode to error
+	set the strictProperties to true
+	
+	return savedSUTs().(systemShortname)
+end withKey
 
 
 # Establishes connection to saved SUT via shortname.
 -- Example: savedSUTs.connectTo(unraid_win10pro)
 on connectTo systemShortname
-	put savedSUTs(systemShortname) into targetSystem
+	put savedSUTs.withKey(systemShortname) into targetSystem
 	connect targetSystem
 end connectTo
+
+
+on ifNoConnectionConnectTo systemShortname
+	put connectionInfo() into currentConnectionInfo
+	
+	if currentConnectionInfo is empty then savedSUTs.connectTo(systemShortname)
+	else logWarning !"There is currently an active [[currentConnectionInfo.Type]] connection to host '[[currentConnectionInfo.ServerID]].[[currentConnectionInfo.PortNum]]'."
+end ifNoConnectionConnectTo
