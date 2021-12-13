@@ -9,17 +9,16 @@ set systems to {
 		password: "3ggpl4nt",
 		type: "VNC"
 	},
-
 }
 
 return systems
 
 
 # Returns the value associated with defined key.
+-- Example: log savedSUTs.withKey(unraid_win10pro)
 function withKey systemShortname
 	set the duplicatePropertyKeyMode to error
 	set the strictProperties to true
-	
 	return savedSUTs().(systemShortname)
 end withKey
 
@@ -32,9 +31,10 @@ on connectTo systemShortname
 end connectTo
 
 
+# Connects ONLY if there is no active connection. Useful when designing model.
+-- Example: savedSUTs.ifNoConnectionConnectTo(unraid_win10pro)
 on ifNoConnectionConnectTo systemShortname
 	put connectionInfo() into currentConnectionInfo
-	
 	if currentConnectionInfo is empty then savedSUTs.connectTo(systemShortname)
 	else logWarning !"There is currently an active [[currentConnectionInfo.Type]] connection to host '[[currentConnectionInfo.ServerID]].[[currentConnectionInfo.PortNum]]'."
 end ifNoConnectionConnectTo

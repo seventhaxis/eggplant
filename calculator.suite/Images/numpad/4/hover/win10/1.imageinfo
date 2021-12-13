@@ -1,23 +1,21 @@
 ﻿{
-    CaptureDate = "2020-05-16 19:50:32 +0000";
+    CaptureDate = "2020-05-16 19:49:48 +0000";
     CaptureHost = "Local: Windows 10 Pro (x64)";
-    CaptureScreenSize =     (
-        1920,
-        1080
-    );
+    CaptureScreenSize = (
+        "1920",
+        "1080");
     HasAlpha = 1;
     HotSpotX = 24;
     HotSpotY = 22;
-    ImageDescription = {length = 0, bytes = 0x};
+    ImageDescription = <>;
     ImageTolerance = 25;
     LastKnownLocationX = 0;
     LastKnownLocationY = 0;
-    OriginalLocationX = 889;
+    OriginalLocationX = 616;
     OriginalLocationY = 708;
     Precise = 0;
     Pulsing = 0;
     Scale = 1;
-    SearchAlgorithm = TextSmoothSquare;
-    tags =     (
-    );
+    SearchAlgorithm = "TextSmoothSquare";
+    tags = ();
 }

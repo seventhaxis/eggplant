@@ -7,7 +7,7 @@ end decrementRemainingCount
 
 # Returns boolean value for if division is possible, when entering the 'Operators' state.
 to isDivisionPossible currentPossibility, nonZeroEntered
-	return (currentPossibility and nonZeroEntered)
+	return (currentPossibility AND nonZeroEntered)
 end isDivisionPossible
 
 

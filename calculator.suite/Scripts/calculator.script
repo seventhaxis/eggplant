@@ -49,7 +49,7 @@ on closeProgram
 		// restrict search rectangle to right-click menu (rough estimate)
 		put foundImageLocation() + [-125, -250] into topLeftAnchor
 		put foundImageLocation() + [125, 0] into botRightAnchor
-		put (topLeftAnchor, botRightAnchor) into rightClickMenuRect
+		put [topLeftAnchor, botRightAnchor] into rightClickMenuRect
 		
 		if imageFound(text: "Close all windows", caseSensitive: true, waitFor: 3.0, searchRectangle: rightClickMenuRect)
 			click foundImageLocation()
@@ -91,8 +91,8 @@ on launchProgram
 	put foundImageLocation() into menuButtonLocation
 	
 	assert that imageFound(image: "memory_store_button/", waitFor: 0.0)
-put foundImageLocation() into memoryButtonLocation	
-	if memoryButtonLocation - menuButtonLocation does not equal [342, 212] then resizeProgramWindow
+	put foundImageLocation() into memoryButtonLocation
+	if [memoryButtonLocation.x - menuButtonLocation.x] does NOT equal 342 then resizeProgramWindow
 
 	restrictSearchRectangleToProgramWindow
 end launchProgram
@@ -147,41 +147,56 @@ end pressOperator
 on resizeProgramWindow
 	restoreProgramWindow
 	
-	// find the right-side of program by looking for History tab
 	put "close_window_button/" into closeButton
-	if imageFound("history_tab/") // use close button as reference
-		put imageLocation(closeButton) + (25, 50) into rightEdge
+	put imageLocation(closeButton) into closeButtonLoc
+	
+	// find the right-side of program by looking for History tab
+	if imageFound(image: "history_tab/", waitFor: 0) // use close button as reference
+		put closeButtonLoc + [25, 50] into rightEdge
 	else	 // use history button as reference
-		put imageLocation("history_button/") + (20, 0) into rightEdge
+		put imageLocation("history_button/") + [20, 0] into rightEdge
 	end if
 	
-	// drag right edge to proper width
-	put (imageLocation("menu_button/").x + 535, rightEdge.y) into desiredWidth
-	drag rightEdge
-	drop desiredWidth
+	// if necessary, drag right edge to proper width
+	put imageLocation("menu_button/") into menuButtonLoc
+	if [rightEdge.x - menuButtonLoc.x] is NOT equal to 535
+		put [menuButtonLoc.x + 535, rightEdge.y] into desiredWidth
+		drag rightEdge
+		drop desiredWidth
+	end if
 	
-	// drop top edge to proper height
-	put imageRectangle(closeButton).topLeft() + (-100, 0) into topEdge
+	// get current location for title bar
+	put imageLocation(closeButton) into closeButtonLoc
+	put closeButtonLoc + [-200, 0] into titleBarLoc
+	
+	// store location of draggable top edge of program
+	put imageRectangle(closeButton).topLeft + [-100, 0] into topEdge
+	put [remoteScreenSize().x / 2, 100] into topMiddle
+	
 	put "numpad/0/" into numpadZero
-	put imageLocation(image: numpadZero, scale: 0.7 to 1.2 by 0.1) into numpadZeroLocation
-	put (topEdge.x, numpadZeroLocation.y - 800) into desiredHeight
+	put imageLocation(image: numpadZero, waitFor: 0) into numpadZeroLoc
+	if numpadZeroLoc.y is NOT 950 // reposition according to zero button's location
+		put 950 - numpadZeroLoc.y into deltaV
+		put [topMiddle.x, topEdge.y + deltaV] into desiredtitleBarLoc
+		drag titleBarLoc
+		drop desiredtitleBarLoc
+		
+		put imageRectangle(closeButton).topLeft + [-100, 0] into topEdge
+		put imageLocation(image: numpadZero, waitFor: 0) into numpadZeroLoc
+	end if
 	
+	put [topEdge.x, numpadZeroLoc.y - 800] into desiredHeight
 	drag topEdge
 	drop desiredHeight
-	
-	put imageLocation(closeButton) + (-200, 0) into headerBar
-	put (remoteScreenSize().x / 2, 100) into topMiddle
-	drag headerBar
-	drop topMiddle
 end resizeProgramWindow
 
 
 // Restores calculator window (if possible).
 on restoreProgramWindow
 	put remoteScreenSize() into screenResolution
-	put (screenResolution.x * 11/12, 0) into topLeftAnchor
-	put (screenResolution.x, 50) into bottomRightAnchor
-	put (topLeftAnchor, bottomRightAnchor) into topRightCorner
+	put [screenResolution.x * 11/12, 0] into topLeftAnchor
+	put [screenResolution.x, 50] into bottomRightAnchor
+	put [topLeftAnchor, bottomRightAnchor] into topRightCorner
 	
 	if imageFound(image: "restore_window_button/", searchRectangle: topRightCorner, waitFor: 0) then click foundImageLocation()
 	
@@ -197,19 +212,19 @@ on restrictSearchRectangleToProgramWindow
 	put titleBarLocation + [-35, -15] into topLeftAnchor
 	put imageLocation("close_window_button/").x + 20 into rightAnchor
 	put imageLocation("operators/equals/").y + 45 into bottomAnchor
-	put (rightAnchor, bottomAnchor) into bottomRightAnchor
+	put [rightAnchor, bottomAnchor] into bottomRightAnchor
 	
-	set the searchRectangle to (topLeftAnchor, bottomRightAnchor)
+	set the searchRectangle to [topLeftAnchor, bottomRightAnchor]
 end restrictSearchRectangleToProgramWindow
 
 
 // Returns a rectangle for the calculator's output area to be used in readText() calls.
 function resultsRectangle
 	put imageLocation("menu_button/") + [-15, 50] into topLeftAnchor
-	put imageRectangle("history_button/").right() into rightAnchor
-	put imageRectangle("memory_store_button/").top() - 10 into bottomAnchor
+	put imageRectangle("history_button/").right into rightAnchor
+	put imageRectangle("memory_store_button/").top - 10 into bottomAnchor
 	put [rightAnchor, bottomAnchor] into bottomRightAnchor
-	return (topLeftAnchor, bottomRightAnchor)
+	return [topLeftAnchor, bottomRightAnchor]
 end resultsRectangle
 
 
