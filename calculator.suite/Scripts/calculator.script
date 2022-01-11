@@ -61,7 +61,7 @@ end closeProgram
 
 
 // Returns the value currently displayed on system calculator.
-to displayedValue
+function displayedValue
 	return readText(resultsRectangle(), validCharacters: "0123456789e,.-+", contrast: on, contrastColor: "#000000")
 end displayedValue
 

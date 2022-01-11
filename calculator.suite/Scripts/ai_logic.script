@@ -1,12 +1,12 @@
 ﻿# Reduces incoming current total by one (1), and returns new total to AI model.
-to decrementRemainingCount currentTotal
+function decrementRemainingCount currentTotal
 	if currentTotal is greater than 0 then return (currentTotal - 1)
 	else return currentTotal
 end decrementRemainingCount
 
 
 # Returns boolean value for if division is possible, when entering the 'Operators' state.
-to isDivisionPossible currentPossibility, nonZeroEntered
+function isDivisionPossible currentPossibility, nonZeroEntered
 	return (currentPossibility AND nonZeroEntered)
 end isDivisionPossible
 
@@ -19,6 +19,6 @@ end logToConsole
 
 
 # Used within the 'Numpad' state to reset the maximum number of digits on either side of an equation.
-to setRemainingDigits maxDigits
+function setRemainingDigits maxDigits
 	return maxDigits
 end setRemainingDigits
