@@ -1,4 +1,5 @@
-﻿function imageDisappeared searchMetrics
+﻿// Returns a true/false for whether an image that is already on screen is later removed.
+function imageDisappeared searchMetrics
 	set the strictProperties to false
 	
 	// if handler is called with only an image path, turn it into a property list
