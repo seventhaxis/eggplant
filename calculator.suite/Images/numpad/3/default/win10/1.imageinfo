@@ -8,7 +8,7 @@
     HotSpotX = 24;
     HotSpotY = 22;
     ImageDescription = <>;
-    ImageTolerance = 25;
+    ImageTolerance = 45;
     LastKnownLocationX = 0;
     LastKnownLocationY = 0;
     OriginalLocationX = 888;
@@ -17,5 +17,6 @@
     Pulsing = 0;
     Scale = 1;
     SearchAlgorithm = "TextSmoothSquare";
+    SearchObjectName = "numpad/3/default/win10/1";
     tags = ();
 }

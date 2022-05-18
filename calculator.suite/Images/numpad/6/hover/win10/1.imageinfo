@@ -8,7 +8,7 @@
     HotSpotX = 24;
     HotSpotY = 22;
     ImageDescription = <>;
-    ImageTolerance = 25;
+    ImageTolerance = 40;
     LastKnownLocationX = 0;
     LastKnownLocationY = 0;
     OriginalLocationX = 889;
@@ -17,5 +17,6 @@
     Pulsing = 0;
     Scale = 1;
     SearchAlgorithm = "TextSmoothSquare";
+    SearchObjectName = "numpad/6/hover/win10/1";
     tags = ();
 }

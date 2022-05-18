@@ -1,5 +1,8 @@
 ﻿params shortname
 
+set duplicatePropertyKeyMode to error
+set strictProperties to true
+
 set systems to {
 	
 	### INTRANET
