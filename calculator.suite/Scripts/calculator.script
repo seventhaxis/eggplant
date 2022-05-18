@@ -1,4 +1,5 @@
-﻿function addedTo xInt, yInt
+﻿// Adds one number to another
+function addedTo xInt, yInt
 	return performCalculation(yInt, "add", xInt)
 end addedTo
 
