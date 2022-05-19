@@ -229,6 +229,7 @@ function resultsRectangle
 end resultsRectangle
 
 
+// Subtracts one number from another
 function subtractedFrom xInt, yInt
 	return performCalculation(yInt, "subtract", xInt)
 end subtractedFrom
