@@ -7,7 +7,4 @@
 **/SuiteInfo
 **/SearchObjects/
 *.searchobjects
-#**.vamignore
 .run/
-#**/.vam/
-

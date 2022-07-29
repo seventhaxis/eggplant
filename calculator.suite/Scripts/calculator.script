@@ -221,11 +221,15 @@ end restrictSearchRectangleToProgramWindow
 
 // Returns a rectangle for the calculator's output area to be used in readText() calls.
 function resultsRectangle
-	put imageLocation("menu_button/") + [-15, 50] into topLeftAnchor
-	put imageRectangle("history_button/").right into rightAnchor
-	put imageRectangle("memory_store_button/").top - 10 into bottomAnchor
-	put [rightAnchor, bottomAnchor] into bottomRightAnchor
-	return [topLeftAnchor, bottomRightAnchor]
+	if global resultsRectangle is empty
+		put imageLocation("menu_button/") + [-15, 50] into topLeftAnchor
+		put imageRectangle("history_button/").right into rightAnchor
+		put imageRectangle("memory_store_button/").top - 10 into bottomAnchor
+		put [rightAnchor, bottomAnchor] into bottomRightAnchor
+		put [topLeftAnchor, bottomRightAnchor] into global resultsRectangle
+	end if
+	
+	return global resultsRectangle
 end resultsRectangle
 
 
