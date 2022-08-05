@@ -14,9 +14,8 @@ calculator.checkOperators
 calculator.checkNumpad
 
 # Demonstrates ability to validate on-screen results with expected calculated results.
-assert that calculator.addedTo(14, 2) equals 16
-assert that calculator.subtractedFrom(8, 3) equals -5
 assert that calculator.multipliedBy(4, 9) equals 36
-assert that calculator.dividedBy(60, 1.5) equals 40
+assert that calculator.multipliedBy(27, 14) equals 378
+assert that calculator.multipliedBy(3.5, 10) equals 35
 
 calculator.closeProgram

@@ -1,0 +1,22 @@
+﻿{
+    Bitmask = <ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffffffff ffff0100 00003000 00000000>;
+    BitmaskSize = "37,37";
+    CaptureDate = "2020-07-17 16:40:08 +0000";
+    CaptureHost = "Local: Windows 10 Pro (x64)";
+    CaptureScreenSize = (
+        "1920",
+        "1080");
+    HasAlpha = 1;
+    HotSpotX = 18;
+    HotSpotY = 18;
+    ImageDescription = <>;
+    ImageTolerance = 10;
+    LastKnownLocationX = 0;
+    LastKnownLocationY = 0;
+    OriginalLocationX = 252;
+    OriginalLocationY = 1043;
+    Precise = 0;
+    Pulsing = 0;
+    Scale = 1;
+    tags = ();
+}

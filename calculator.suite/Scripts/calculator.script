@@ -7,14 +7,14 @@ end addedTo
 // Validates default and hover states for all numpad buttons.
 on checkNumpad
 	moveTo [0, 0]
-	repeat for each item number in (0..9 as a list)
-		put !"numpad/[[number]]/" into targetButton
+	repeat for each item n in (0..9 as a list)
+		put imgPath.forNumber(n) into targetButton
 		moveTo targetButton & "default/"
-		waitFor 5.0, targetButton & "hover/"
-		log !"Validated the button states for the '[[number]]' button."
+		waitFor 5, targetButton & "hover/"
+		log !"Validated the button states for the '[[n]]' button."
 	end repeat
 	
-	logSuccess "Validated numpad button states."
+	logSuccess "Validated all numpad button states."
 end checkNumpad
 
 
@@ -22,48 +22,51 @@ end checkNumpad
 on checkOperators
 	moveTo [0, 0]
 	put ["divide", "multiply", "subtract", "add", "equals"] into calcOperators
-	repeat for each item operator in calcOperators
-		put !"operators/[[operator]]/" into targetOperator
+	repeat for each item op in calcOperators
+		put imgPath.forOperator(op) into targetOperator
 		moveTo targetOperator & "default/"
-		waitFor 5.0, targetOperator & "hover/"
-		log !"Validated the button states for the '[[operator]]' button."
+		waitFor 5, targetOperator & "hover/"
+		log !"Validated the button states for the '[[op]]' button."
 	end repeat
 	
-	logSuccess "Validated operator button states."
+	logSuccess "Validated all operator button states."
 end checkOperators
 
 
 // Searches for and clicks the INACTIVE Windows taskbar icon for the calculator.
 on clickInactiveTaskbarIcon
 	put helpers.taskbarRectangle() into taskbarRect
-	click(image: "taskbar_icon/inactive/", searchRectangle: taskbarRect)
+	put imgPath.forKey("sys_taskbar_icon") & "inactive/" into inactiveIcon
+	click(image: inactiveIcon, searchRectangle: taskbarRect)
 end clickInactiveTaskbarIcon
 
 
 // Closes all instances of calculator through the taskbar icon's right-click menu.
 on closeProgram
 	put helpers.taskbarRectangle() into taskbarRect
-	if imageFound(image: "taskbar_icon/active/", waitFor: 0, searchRectangle: taskbarRect)
+	put imgPath.forKey("sys_taskbar_icon") & "active/" into activeIcon
+	if imageFound(image: activeIcon, waitFor: 0, searchRectangle: taskbarRect)
 		rightClick foundImageLocation()
-		
 		
 		// restrict search rectangle to right-click menu (rough estimate)
 		put foundImageLocation() + [-125, -250] into topLeftAnchor
 		put foundImageLocation() + [125, 0] into botRightAnchor
 		put [topLeftAnchor, botRightAnchor] into rightClickMenuRect
 		
-		if imageFound(text: "Close all windows", caseSensitive: true, waitFor: 3.0, searchRectangle: rightClickMenuRect)
-			click foundImageLocation()
-		else
-			click{text: "Close window", caseSensitive: true, waitFor: 0, searchRectangle: rightClickMenuRect}
-		end if
+		click {text: "Close", caseSensitive: true, waitFor: 3, searchRectangle: rightClickMenuRect}
+	else
+		logWarning "Unable to find active taskbar icon for the calculator program."
 	end if
 end closeProgram
 
 
 // Returns the value currently displayed on system calculator.
 function displayedValue
-	return readText(resultsRectangle(), validCharacters: "0123456789e,.-+", contrast: on, contrastColor: "#000000")
+	put readText(resultsRectangle(), validCharacters: "0123456789e,.-+", contrast: on, contrastColor: "#000000") into value
+	if value is empty
+		put readText(resultsRectangle(), validCharacters: "0123456789e,.-+") into value
+	end if
+	return value
 end displayedValue
 
 
@@ -76,7 +79,8 @@ end dividedBy
 on enterNumber digits
 	put each character of digits as text into digitList
 	repeat for each item digit of digitList
-		if digit is a number then pressNumber digit
+		if digit is a number
+		then pressNumber digit
 		else pressDecimalButton
 	end repeat
 end enterNumber
@@ -87,14 +91,10 @@ end enterNumber
 on launchProgram
 	clickInactiveTaskbarIcon
 	
-	// two-element validation to ensure calculator appears on-screen
-	assert that imageFound(image: "menu_button/", waitFor: 5.0)
-	put foundImageLocation() into menuButtonLocation
+	put imgPath.forKey("calc_history_btn") into historyButton
+	if NOT imageFound(image: historyButton, waitFor: 0) OR if programWidth() does NOT equal 342
+	then resizeProgramWindow
 	
-	assert that imageFound(image: "memory_store_button/", waitFor: 0.0)
-	put foundImageLocation() into memoryButtonLocation
-	if [memoryButtonLocation.x - menuButtonLocation.x] does NOT equal 342 then resizeProgramWindow
-
 	restrictSearchRectangleToProgramWindow
 end launchProgram
 
@@ -115,51 +115,67 @@ function performCalculation xInt, targetOperator, yInt
 	pressOperator targetOperator
 	enterNumber yInt
 	pressOperator "equals"
+	wait 1 // allow display area to update within feed from remote machine
 	return displayedValue()
 end performCalculation
 
 
 on pressClearButton
-	put "clear_button/" into clearButton
+	put imgPath.forKey("calc_clear_btn") into clearButton
 	click clearButton
 end pressClearButton
 
 
 on pressDecimalButton
-	put "decimal_button/" into decimalButton
+	put imgPath.forKey("calc_decimal_btn") into decimalButton
 	click decimalButton
 end pressDecimalButton
 
 
 on pressNumber targetNumber
-	put "numpad/" & targetNumber into numberButton
+	put imgPath.forNumber(targetNumber) into numberButton
 	click numberButton
 end pressNumber
 
 
 // Presses the defined operator button, regardless of state.
 on pressOperator targetOperator
-	put "operators/" & targetOperator into operatorButton
+	put imgPath.forOperator(targetOperator) into operatorButton
 	click operatorButton
 end pressOperator
+
+
+function programWidth
+	// two-element validation to ensure calculator appears on-screen
+	put imgPath.forKey("calc_menu_btn") into menuButton
+	put imageLocation(image: menuButton, waitFor: 5) into menuButtonLocation
+	
+	put imgPath.forKey("calc_memstore_btn") into memoryButton
+	put imageFound(image: memoryButton, waitFor: 0) into memoryButtonLocation
+	
+	return (memoryButtonLocation.x - menuButtonLocation.x)
+end programWidth
 
 
 // Resizes calculator program to reduce test failures due to scaling mismatches.
 on resizeProgramWindow
 	restoreProgramWindow
 	
-	put "close_window_button/" into closeButton
+	put imgPath.forKey("sys_close_window_btn") into closeButton
 	put imageLocation(closeButton) into closeButtonLoc
 	
 	// find the right-side of program by looking for History tab
-	if imageFound(image: "history_tab/", waitFor: 0) // use close button as reference
+	put imgPath.forKey("calc_history_tab") into historyTab
+	if imageFound(image: historyTab, waitFor: 0) // use close button as reference
 		put closeButtonLoc + [25, 50] into rightEdge
 	else	 // use history button as reference
-		put imageLocation("history_button/") + [20, 0] into rightEdge
+		put imgPath.forKey("calc_history_btn") into historyButton
+		put imageLocation(historyButton) + [20, 0] into rightEdge
 	end if
 	
 	// if necessary, drag right edge to proper width
-	put imageLocation("menu_button/") into menuButtonLoc
+	put imgPath.forKey("calc_menu_btn") into menuButton
+	put imageLocation(menuButton) into menuButtonLoc
 	if [rightEdge.x - menuButtonLoc.x] is NOT equal to 535
 		put [menuButtonLoc.x + 535, rightEdge.y] into desiredWidth
 		drag rightEdge
@@ -174,7 +190,7 @@ on resizeProgramWindow
 	put imageRectangle(closeButton).topLeft + [-100, 0] into topEdge
 	put [remoteScreenSize().x / 2, 100] into topMiddle
 	
-	put "numpad/0/" into numpadZero
+	put imgPath.forNumber(0) into numpadZero
 	put imageLocation(image: numpadZero, waitFor: 0) into numpadZeroLoc
 	if numpadZeroLoc.y is NOT 950 // reposition according to zero button's location
 		put 950 - numpadZeroLoc.y into deltaV
@@ -198,10 +214,13 @@ on restoreProgramWindow
 	put [screenResolution.x * 11/12, 0] into topLeftAnchor
 	put [screenResolution.x, 50] into bottomRightAnchor
 	put [topLeftAnchor, bottomRightAnchor] into topRightCorner
+
+	put imgPath.forKey("sys_restore_window_btn") into restoreWindowButton
+	if imageFound(image: restoreWindowButton, searchRectangle: topRightCorner, waitFor: 0)
+	then click foundImageLocation()
 	
-	if imageFound(image: "restore_window_button/", searchRectangle: topRightCorner, waitFor: 0) then click foundImageLocation()
-	
-	assert that imageFound(image: "maximize_window_button/", waitFor: 5.0)
+	put imgPath.forKey("sys_max_window_btn") into maximizeWindowButton
+	assert that imageFound(image: maximizeWindowButton, waitFor: 5)
 end restoreProgramWindow
 
 
@@ -211,8 +230,10 @@ on restrictSearchRectangleToProgramWindow
 	
 	put imageLocation(text: "Calculator", caseSensitive: yes) into titleBarLocation
 	put titleBarLocation + [-35, -15] into topLeftAnchor
-	put imageLocation("close_window_button/").x + 20 into rightAnchor
-	put imageLocation("operators/equals/").y + 45 into bottomAnchor
+	put imgPath.forKey("sys_close_window_btn") into closeWindowButton
+	put imageLocation(closeWindowButton).x + 20 into rightAnchor
+	put imgPath.forOperator("equals") into equalsButton
+	put imageLocation(equalsButton).y + 45 into bottomAnchor
 	put [rightAnchor, bottomAnchor] into bottomRightAnchor
 	
 	set the searchRectangle to [topLeftAnchor, bottomRightAnchor]
@@ -222,10 +243,15 @@ end restrictSearchRectangleToProgramWindow
 // Returns a rectangle for the calculator's output area to be used in readText() calls.
 function resultsRectangle
 	if global resultsRectangle is empty
-		put imageLocation("menu_button/") + [-15, 50] into topLeftAnchor
-		put imageRectangle("history_button/").right into rightAnchor
-		put imageRectangle("memory_store_button/").top - 10 into bottomAnchor
+		put imgPath.forKey("calc_menu_btn") into menuButton
+		put imageLocation(menuButton) + [-15, 50] into topLeftAnchor
+
+		put imgPath.forKey("calc_history_btn") into historyButton
+		put imageRectangle(historyButton).right into rightAnchor
+		put imgPath.forKey("calc_memstore_btn") into memoryStoreButton
+		put imageRectangle(memoryStoreButton).top - 10 into bottomAnchor
 		put [rightAnchor, bottomAnchor] into bottomRightAnchor
+
 		put [topLeftAnchor, bottomRightAnchor] into global resultsRectangle
 	end if
 	

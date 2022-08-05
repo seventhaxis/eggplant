@@ -1,7 +1,5 @@
-﻿params shortname
-
-set duplicatePropertyKeyMode to error
-set strictProperties to true
+﻿set the duplicatePropertyKeyMode to error
+set the strictProperties to true
 
 set systems to {
 	
@@ -20,8 +18,6 @@ return systems
 # Returns the value associated with defined key.
 -- Example: log savedSUTs.withKey(unraid_win10pro)
 function withKey systemShortname
-	set the duplicatePropertyKeyMode to error
-	set the strictProperties to true
 	return savedSUTs().(systemShortname)
 end withKey
 
@@ -35,9 +31,9 @@ end connectTo
 
 
 # Connects ONLY if there is no active connection. Useful when designing model.
--- Example: savedSUTs.ifNoConnectionConnectTo(unraid_win10pro)
+-- Example: savedSUTs.connectIfNoConnection(unraid_win10pro)
 on connectIfNoConnection systemShortname
 	put connectionInfo() into currentConnectionInfo
 	if currentConnectionInfo is empty then savedSUTs.connectTo(systemShortname)
-	else logWarning !"There is currently an active [[currentConnectionInfo.Type]] connection to host '[[currentConnectionInfo.ServerID]].[[currentConnectionInfo.PortNum]]'."
+	else logWarning !"There is currently an active [[currentConnectionInfo.Type]] connection to host '[[currentConnectionInfo.ServerID]]:[[currentConnectionInfo.PortNum]]'."
 end connectIfNoConnection

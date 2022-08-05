@@ -1,0 +1,46 @@
+﻿set the duplicatePropertyKeyMode to error
+set the strictProperties to true
+
+put "calculator/" into calcPath
+put "system/" into sysPath
+
+set images to {
+
+	### CALCULATOR
+	calc_clear_btn: calcPath & "clear_button",
+	calc_decimal_btn: calcPath & "decimal_button",
+	calc_history_btn: calcPath & "history_button",
+	calc_history_tab: calcPath & "history_tab",
+	calc_memstore_btn: calcPath & "memory_store_button",
+	calc_menu_btn: calcPath & "menu_button",
+	calc_numpad: calcPath & "numpad",
+	calc_operators: calcPath & "operators",
+	
+	### OPERATING SYSTEM
+	sys_close_window_btn: sysPath & "close_window_button",
+	sys_max_window_btn: sysPath & "maximize_window_button",
+	sys_restore_window_btn: sysPath & "restore_window_button",
+	sys_taskbar_icon: sysPath & "taskbar_icon",
+
+}
+
+return images
+
+
+function forKey imgKey
+	put imgPath().(imgKey) into imagePath
+	if the last character of imagePath is "/" then return imagePath
+	else return imagePath & "/"
+end forKey
+
+
+function forNumber num
+	assert that (0..9 as a list) contains num
+	return imgPath.forKey("calc_numpad") & num & "/"
+end forNumber
+
+
+function forOperator op
+	assert that ["divide", "multiply", "subtract", "add", "equals"] contains op
+	return imgPath.forKey("calc_operators") & op & "/"
+end forOperator
