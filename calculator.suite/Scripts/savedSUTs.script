@@ -2,13 +2,19 @@
 set the strictProperties to true
 
 set systems to {
-	
+
 	### INTRANET
-	unraid_win10pro: {
+	unraid_windows: {
 		serverID: "192.168.7.202",
 		portNum: 5901,
-		password: "3ggpl4nt",
-		type: "VNC"
+		password: getVaultValue("unraid_windows_password"),
+		type: "VNC",
+	},
+	unraid_ubuntu: {
+		serverID: "192.168.7.202",
+		portNum: 5900,
+		password: getVaultValue("unraid_ubuntu_password"),
+		type: "VNC",
 	},
 }
 
@@ -16,14 +22,15 @@ return systems
 
 
 # Returns the value associated with defined key.
--- Example: log savedSUTs.withKey(unraid_win10pro)
+-- Example: log savedSUTs.withKey(unraid_windows)
 function withKey systemShortname
 	return savedSUTs().(systemShortname)
 end withKey
 
 
 # Establishes connection to saved SUT via shortname.
--- Example: savedSUTs.connectTo(unraid_win10pro)
+-- Example: savedSUTs.connectTo(unraid_windows)
+-- Example: savedSUTs.connectTo(unraid_ubuntu)
 on connectTo systemShortname
 	put savedSUTs.withKey(systemShortname) into targetSystem
 	connect targetSystem
@@ -31,7 +38,7 @@ end connectTo
 
 
 # Connects ONLY if there is no active connection. Useful when designing model.
--- Example: savedSUTs.connectIfNoConnection(unraid_win10pro)
+-- Example: savedSUTs.connectIfNoConnection(unraid_windows)
 on connectIfNoConnection systemShortname
 	put connectionInfo() into currentConnectionInfo
 	if currentConnectionInfo is empty then savedSUTs.connectTo(systemShortname)
