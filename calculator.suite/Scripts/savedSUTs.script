@@ -22,17 +22,17 @@ return systems
 
 
 # Returns the value associated with defined key.
--- Example: log savedSUTs.withKey(unraid_windows)
-function withKey systemShortname
+-- Example: log savedSUTs.forKey(unraid_windows)
+function forKey systemShortname
 	return savedSUTs().(systemShortname)
-end withKey
+end forKey
 
 
 # Establishes connection to saved SUT via shortname.
 -- Example: savedSUTs.connectTo(unraid_windows)
 -- Example: savedSUTs.connectTo(unraid_ubuntu)
 on connectTo systemShortname
-	put savedSUTs.withKey(systemShortname) into targetSystem
+	put savedSUTs.forKey(systemShortname) into targetSystem
 	connect targetSystem
 end connectTo
 
