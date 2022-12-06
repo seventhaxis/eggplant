@@ -61,7 +61,7 @@ end closeProgram
 
 
 // Returns the value currently displayed on system calculator.
-function displayedValue
+to displayedValue
 	put readText(resultsRectangle(), validCharacters: "0123456789e,.-+", contrast: on, contrastColor: "#000000") into value
 	if value is empty
 		put readText(resultsRectangle(), validCharacters: "0123456789e,.-+") into value
