@@ -216,7 +216,7 @@ on restoreProgramWindow
 	put [topLeftAnchor, bottomRightAnchor] into topRightCorner
 
 	put imgPath.forKey("sys_restore_window_btn") into restoreWindowButton
-	if imageFound(image: restoreWindowButton, searchRectangle: topRightCorner, waitFor: 0)
+	if imageFound(image: restoreWindowButton, searchRectangle: topRightCorner, waitFor: 3)
 	then click foundImageLocation()
 	
 	put imgPath.forKey("sys_max_window_btn") into maximizeWindowButton
