@@ -1,0 +1,12 @@
+﻿# Close any open instance(s) and launch a fresh program.
+calculator.closeProgram
+calculator.launchProgram
+
+# Ensures calculator clear button works properly while resetting program to known initial state.
+calculator.pressClearButton
+assert that calculator.displayedValue() equals zero
+
+# Validate button states and background colors by looping through each element.
+calculator.checkOperators
+
+calculator.closeProgram

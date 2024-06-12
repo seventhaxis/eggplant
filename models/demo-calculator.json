@@ -1,1 +1,2292 @@
-{"stateCounter":9,"actionCounter":48,"parameterCounter":65,"ePFhost":"eggplant","ePFsuite":"/Users/matt.brown/Projects/eggplant-demos/mbrown.suite","suitePath":"/Projects/eggplant-demos/mbrown.suite","path":"","verbosity":32512,"snippetFull":true,"allSnippetsDisabled":false,"runCleanupAfterAbort":true,"allowGlobalActionsInInitialStates":false,"performanceTimings":true,"elements":[{"name":"demo-calculator","type":"Root","id":0,"parameters":[{"id":1,"name":"targetSUT","type":"Text","initial":"local_win10pro","random":"Non-generated","ranges":[]},{"id":2,"name":"maxCalculations","type":"Integer","initial":"3","random":"Non-generated","ranges":[]},{"id":3,"name":"maxDigits","type":"Integer","initial":"2","random":"Non-generated","ranges":[]},{"id":4,"name":"latestTotal","type":"Integer","initial":"","random":"Non-generated","ranges":[]},{"id":5,"name":"isDivisionPossible","type":"True or False","initial":"","random":"Non-generated","ranges":[]}]},{"name":"Exit","type":"State","id":1,"parentId":0,"stateType":"Normal","invisible":true,"sortingType":"Z","parameters":[{"id":0,"name":"","type":"","initial":"","random":"","ranges":[]}]},{"name":"Error","type":"State","id":2,"parentId":0,"stateType":"Exception","invisible":true,"sortingType":"X","parameters":[{"id":0,"name":"","type":"","initial":"","random":"","ranges":[]}]},{"name":"Cleanup","type":"State","id":3,"parentId":0,"stateType":"Cleanup","invisible":true,"sortingType":"Y","snippets":[{"fullName":"calculator.script:closeProgram","scriptPath":"applications/calculator.script:closeProgram","type":"normal"}],"parameters":[{"id":0,"name":"","type":"","initial":"","random":"","ranges":[]}]},{"name":"Model Setup","type":"State","id":4,"parentId":0,"dx":20,"dy":20,"textX":20,"textY":25,"shapeWidth":180,"shapeHeight":160,"stateType":"Start","invisible":false,"sortingType":"A","parameters":[{"id":0,"name":"","type":"","initial":"","random":"","ranges":[]}]},{"name":"Root","type":"State","id":5,"parentId":0,"dx":20,"dy":200,"textX":20,"textY":25,"shapeWidth":180,"shapeHeight":260,"stateType":"Normal","invisible":false,"sortingType":"B","description":"","parameters":[{"id":0,"name":"isActiveEquation","type":"True or False","initial":"false","random":"Non-generated","ranges":[]}]},{"name":"Numpad","type":"State","id":6,"parentId":0,"dx":220,"dy":160,"textX":20,"textY":25,"shapeWidth":320,"shapeHeight":300,"stateType":"Normal","invisible":false,"sortingType":"B","snippets":[{"name":"setRemainingDigits","fullName":"demo-calculator.script:setRemainingDigits","scriptPath":"eai_logic/demo-calculator.script:setRemainingDigits","type":"normal","outputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":1}],"inputs":[{"parameterRef":{"id":3,"name":"maxDigits","type":"Integer","initial":"2","random":"Non-generated","ranges":[]},"order":6}]}],"parameters":[{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},{"id":1,"name":"nonZeroEntered","type":"True or False","initial":"","random":"Generated","ranges":[{"values":"false","weight":100,"distribution":"Flat","numBins":"1"}]}]},{"name":"Operators","type":"State","id":7,"parentId":0,"dx":560,"dy":20,"textX":20,"textY":25,"shapeWidth":140,"shapeHeight":440,"stateType":"Normal","invisible":false,"sortingType":"B","parameters":[{"id":0,"name":"isOperatorSelected","type":"True or False","initial":"false","random":"Non-generated","ranges":[]}]},{"name":"OSD","type":"State","id":8,"parentId":0,"dx":220,"dy":20,"textX":20,"textY":25,"shapeWidth":320,"shapeHeight":120,"stateType":"Normal","invisible":false,"sortingType":"B","parameters":[{"id":0,"name":"isValueExtracted","type":"True or False","initial":"","random":"Generated","ranges":[{"values":"false","weight":100,"distribution":"Flat","numBins":"1"}]}]},{"name":"Connect to System","type":"Action","id":34,"parentId":4,"dx":20,"dy":40,"textX":15,"textY":22,"shapeWidth":140,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"connectTo","fullName":"savedSUTs.script:connectTo","scriptPath":"savedSUTs.script:connectTo","type":"normal","inputs":[{"parameterRef":{"id":1,"name":"targetSUT","type":"Text","initial":"local_win10","random":"Non-generated","ranges":[]},"order":3}]}],"parameters":[{"id":0,"name":"","type":"","initial":"","random":"","ranges":[]}],"preconditions":[],"setGenerate":[],"connectedStates":[{"stateRef":35}],"callLimit":0,"weight":100},{"name":"Launch Calculator","type":"Action","id":35,"parentId":4,"dx":20,"dy":100,"textX":15,"textY":22,"actionType":"Sequent","sortingType":"C","snippets":[{"name":"closeProgram","fullName":"calculator.script:closeProgram","scriptPath":"applications/calculator.script:closeProgram","type":"normal"},{"name":"launchProgram","fullName":"calculator.script:launchProgram","scriptPath":"applications/calculator.script:launchProgram","type":"normal"}],"parameters":[{"id":0,"name":"","type":"","initial":"","random":"","ranges":[]}],"preconditions":[],"connectedStates":[{"stateRef":5}],"callLimit":0,"weight":100},{"name":"New Equation","type":"Action","id":36,"parentId":5,"dx":20,"dy":120,"textX":15,"textY":22,"shapeWidth":120,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressClearButton","fullName":"calculator.script:pressClearButton","scriptPath":"applications/calculator.script:pressClearButton","type":"normal"}],"parameters":[{"id":0,"name":"","type":"","initial":"","random":"","ranges":[]}],"preconditions":[{"parameterName":"maxCalculations","condition":"!=","value":"0"}],"setGenerate":[{"parameterName":"isActiveEquation","setGen":"set","value":"true"},{"parameterName":"isDivisionPossible","setGen":"set","value":"true"}],"connectedStates":[{"stateRef":6}],"callLimit":0,"weight":100},{"name":"Continue Equation","type":"Action","id":37,"parentId":5,"dx":20,"dy":40,"textX":15,"textY":22,"shapeWidth":140,"shapeHeight":40,"actionType":"Normal","sortingType":"C","parameters":[{"id":0,"name":"","type":"","initial":"","random":"","ranges":[]}],"preconditions":[{"parameterName":"isActiveEquation","condition":"==","value":"true"},{"parameterName":"maxCalculations","condition":"!=","value":"0"}],"setGenerate":[],"connectedStates":[{"stateRef":7,"forceLabel":true}],"callLimit":0,"weight":100},{"name":"Close Calculator","type":"Action","id":38,"parentId":5,"dx":20,"dy":180,"textX":15,"textY":22,"shapeWidth":140,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"closeProgram","fullName":"calculator.script:closeProgram","scriptPath":"applications/calculator.script:closeProgram","type":"normal"}],"parameters":[{"id":0,"name":"","type":"","initial":"","random":"","ranges":[]}],"connectedStates":[{"stateRef":1}],"callLimit":0,"weight":5},{"name":"Extract OSD Value","type":"Action","id":39,"parentId":8,"dx":20,"dy":40,"textX":15,"textY":22,"shapeWidth":140,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"displayedValue","fullName":"calculator.script:displayedValue","scriptPath":"applications/calculator.script:displayedValue","type":"normal","outputs":[{"parameterRef":{"id":4,"name":"latestTotal","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":6}]}],"parameters":[{"id":0,"name":"","type":"","initial":"","random":"","ranges":[]}],"preconditions":[{"parameterName":"isValueExtracted","condition":"==","value":"false"}],"setGenerate":[{"parameterName":"isValueExtracted","setGen":"set","value":"true"}],"callLimit":0,"weight":100},{"name":"Print Results","type":"Action","id":40,"parentId":8,"dx":180,"dy":40,"textX":15,"textY":22,"shapeWidth":120,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"logToConsole","fullName":"demo-calculator.script:logToConsole","scriptPath":"eai_logic/demo-calculator.script:logToConsole","type":"normal","inputs":[{"parameterRef":{"id":4,"name":"latestTotal","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":6}]}],"parameters":[{"id":0,"name":"","type":"","initial":"","random":"","ranges":[]}],"preconditions":[{"parameterName":"isValueExtracted","condition":"==","value":"true"}],"setGenerate":[],"connectedStates":[{"stateRef":5,"forceLabel":true}],"callLimit":0,"weight":100},{"name":"DIVIDE","type":"Action","id":41,"parentId":7,"dx":20,"dy":40,"textX":15,"textY":22,"shapeWidth":80,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressOperator","fullName":"calculator.script:pressOperator","scriptPath":"applications/calculator.script:pressOperator","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"divide","type":"Text","initial":"divide","random":"Non-generated","ranges":[]},"order":1}]}],"parameters":[{"id":0,"name":"divide","type":"Text","initial":"divide","random":"Non-generated","ranges":[]}],"preconditions":[{"parameterName":"isOperatorSelected","condition":"==","value":"false"},{"parameterName":"isDivisionPossible","condition":"==","value":"true"}],"setGenerate":[],"connectedStates":[{"stateRef":6,"forceLabel":true}],"callLimit":0,"weight":100},{"name":"MULTIPLY","type":"Action","id":42,"parentId":7,"dx":20,"dy":120,"textX":15,"textY":22,"shapeWidth":100,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressOperator","fullName":"calculator.script:pressOperator","scriptPath":"applications/calculator.script:pressOperator","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"multiply","type":"Text","initial":"multiply","random":"Non-generated","ranges":[]},"order":1}]}],"parameters":[{"id":0,"name":"multiply","type":"Text","initial":"multiply","random":"Non-generated","ranges":[]}],"preconditions":[{"parameterName":"isOperatorSelected","condition":"==","value":"false"}],"setGenerate":[{"parameterName":"isOperatorSelected","setGen":"set","value":"true"}],"connectedStates":[{"stateRef":6,"forceLabel":true}],"callLimit":0,"weight":100},{"name":"SUBTRACT","type":"Action","id":43,"parentId":7,"dx":20,"dy":200,"textX":15,"textY":22,"shapeWidth":100,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressOperator","fullName":"calculator.script:pressOperator","scriptPath":"applications/calculator.script:pressOperator","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"subtract","type":"Text","initial":"subtract","random":"Non-generated","ranges":[]},"order":1}]}],"parameters":[{"id":0,"name":"subtract","type":"Text","initial":"subtract","random":"Non-generated","ranges":[]}],"preconditions":[{"parameterName":"isOperatorSelected","condition":"==","value":"false"}],"setGenerate":[{"parameterName":"isOperatorSelected","setGen":"set","value":"true"}],"connectedStates":[{"stateRef":6,"forceLabel":true}],"callLimit":0,"weight":100},{"name":"ADD","type":"Action","id":44,"parentId":7,"dx":20,"dy":280,"textX":15,"textY":22,"shapeWidth":80,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressOperator","fullName":"calculator.script:pressOperator","scriptPath":"applications/calculator.script:pressOperator","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"add","type":"Text","initial":"add","random":"Non-generated","ranges":[]},"order":1}]}],"parameters":[{"id":0,"name":"add","type":"Text","initial":"add","random":"Non-generated","ranges":[]}],"preconditions":[{"parameterName":"isOperatorSelected","condition":"==","value":"false"}],"setGenerate":[{"parameterName":"isOperatorSelected","setGen":"set","value":"true"}],"connectedStates":[{"stateRef":6,"forceLabel":true}],"callLimit":0,"weight":100},{"name":"EQUALS","type":"Action","id":45,"parentId":7,"dx":20,"dy":360,"textX":15,"textY":22,"shapeWidth":80,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressOperator","fullName":"calculator.script:pressOperator","scriptPath":"applications/calculator.script:pressOperator","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"equals","type":"Text","initial":"equals","random":"Non-generated","ranges":[]},"order":1}]},{"name":"decrementRemainingCount","fullName":"calculator.script:decrementRemainingCount","scriptPath":"applications/calculator.script:decrementRemainingCount","type":"normal","inputs":[{"parameterRef":{"id":2,"name":"maxCalculations","type":"Integer","initial":"3","random":"Non-generated","ranges":[]},"order":4}],"outputs":[{"parameterRef":{"id":2,"name":"maxCalculations","type":"Integer","initial":"3","random":"Non-generated","ranges":[]},"order":4}]}],"parameters":[{"id":0,"name":"equals","type":"Text","initial":"equals","random":"Non-generated","ranges":[]}],"preconditions":[{"parameterName":"isOperatorSelected","condition":"==","value":"true"}],"setGenerate":[{"parameterName":"isOperatorSelected","setGen":"set","value":"false"}],"connectedStates":[{"stateRef":8,"forceLabel":true}],"callLimit":0,"weight":100},{"name":"7","type":"Action","id":46,"parentId":6,"dx":20,"dy":40,"textX":15,"textY":22,"shapeWidth":80,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressNumber","fullName":"calculator.script:pressNumber","scriptPath":"applications/calculator.script:pressNumber","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"seven","type":"Integer","initial":"7","random":"Non-generated","ranges":[]},"order":1}]},{"name":"decrementRemainingCount","fullName":"demo-calculator.script:decrementRemainingCount","scriptPath":"eai_logic/demo-calculator.script:decrementRemainingCount","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}],"outputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}]}],"parameters":[{"id":0,"name":"seven","type":"Integer","initial":"7","random":"Non-generated","ranges":[]}],"preconditions":[{"parameterName":"remainingDigits","condition":"!=","value":"0"}],"setGenerate":[{"parameterName":"nonZeroEntered","setGen":"set","value":"true"}],"callLimit":0,"weight":100},{"name":"8","type":"Action","id":47,"parentId":6,"dx":120,"dy":40,"textX":15,"textY":22,"shapeWidth":80,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressNumber","fullName":"calculator.script:pressNumber","scriptPath":"applications/calculator.script:pressNumber","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"eight","type":"Integer","initial":"8","random":"Non-generated","ranges":[]},"order":1}]},{"name":"decrementRemainingCount","fullName":"demo-calculator.script:decrementRemainingCount","scriptPath":"eai_logic/demo-calculator.script:decrementRemainingCount","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}],"outputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}]}],"parameters":[{"id":0,"name":"eight","type":"Integer","initial":"8","random":"Non-generated","ranges":[]}],"preconditions":[{"parameterName":"remainingDigits","condition":"!=","value":"0"}],"setGenerate":[{"parameterName":"nonZeroEntered","setGen":"set","value":"true"}],"callLimit":0,"weight":100},{"name":"9","type":"Action","id":48,"parentId":6,"dx":220,"dy":40,"textX":15,"textY":22,"shapeWidth":80,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressNumber","fullName":"calculator.script:pressNumber","scriptPath":"applications/calculator.script:pressNumber","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"nine","type":"Integer","initial":"9","random":"Non-generated","ranges":[]},"order":1}]},{"name":"decrementRemainingCount","fullName":"demo-calculator.script:decrementRemainingCount","scriptPath":"eai_logic/demo-calculator.script:decrementRemainingCount","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}],"outputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}]}],"parameters":[{"id":0,"name":"nine","type":"Integer","initial":"9","random":"Non-generated","ranges":[]}],"preconditions":[{"parameterName":"remainingDigits","condition":"!=","value":"0"}],"setGenerate":[{"parameterName":"nonZeroEntered","setGen":"set","value":"true"}],"callLimit":0,"weight":100},{"name":"4","type":"Action","id":49,"parentId":6,"dx":20,"dy":100,"textX":15,"textY":22,"shapeWidth":80,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressNumber","fullName":"calculator.script:pressNumber","scriptPath":"applications/calculator.script:pressNumber","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"four","type":"Integer","initial":"4","random":"Non-generated","ranges":[]},"order":1}]},{"name":"decrementRemainingCount","fullName":"demo-calculator.script:decrementRemainingCount","scriptPath":"eai_logic/demo-calculator.script:decrementRemainingCount","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}],"outputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}]}],"parameters":[{"id":0,"name":"four","type":"Integer","initial":"4","random":"Non-generated","ranges":[]}],"preconditions":[{"parameterName":"remainingDigits","condition":"!=","value":"0"}],"setGenerate":[{"parameterName":"nonZeroEntered","setGen":"set","value":"true"}],"callLimit":0,"weight":100},{"name":"5","type":"Action","id":50,"parentId":6,"dx":120,"dy":100,"textX":15,"textY":22,"shapeWidth":80,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressNumber","fullName":"calculator.script:pressNumber","scriptPath":"applications/calculator.script:pressNumber","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"five","type":"Integer","initial":"5","random":"Non-generated","ranges":[]},"order":1}]},{"name":"decrementRemainingCount","fullName":"demo-calculator.script:decrementRemainingCount","scriptPath":"eai_logic/demo-calculator.script:decrementRemainingCount","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}],"outputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}]}],"parameters":[{"id":0,"name":"five","type":"Integer","initial":"5","random":"Non-generated","ranges":[]}],"preconditions":[{"parameterName":"remainingDigits","condition":"!=","value":"0"}],"setGenerate":[{"parameterName":"nonZeroEntered","setGen":"set","value":"true"}],"callLimit":0,"weight":100},{"name":"6","type":"Action","id":51,"parentId":6,"dx":220,"dy":100,"textX":15,"textY":22,"shapeWidth":80,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressNumber","fullName":"calculator.script:pressNumber","scriptPath":"applications/calculator.script:pressNumber","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"six","type":"Integer","initial":"6","random":"Non-generated","ranges":[]},"order":1}]},{"name":"decrementRemainingCount","fullName":"demo-calculator.script:decrementRemainingCount","scriptPath":"eai_logic/demo-calculator.script:decrementRemainingCount","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}],"outputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}]}],"parameters":[{"id":0,"name":"six","type":"Integer","initial":"6","random":"Non-generated","ranges":[]}],"preconditions":[{"parameterName":"remainingDigits","condition":"!=","value":"0"}],"setGenerate":[{"parameterName":"nonZeroEntered","setGen":"set","value":"true"}],"callLimit":0,"weight":100},{"name":"1","type":"Action","id":52,"parentId":6,"dx":20,"dy":160,"textX":15,"textY":22,"shapeWidth":80,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressNumber","fullName":"calculator.script:pressNumber","scriptPath":"applications/calculator.script:pressNumber","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"one","type":"Integer","initial":"1","random":"Non-generated","ranges":[]},"order":1}]},{"name":"decrementRemainingCount","fullName":"demo-calculator.script:decrementRemainingCount","scriptPath":"eai_logic/demo-calculator.script:decrementRemainingCount","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}],"outputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}]}],"parameters":[{"id":0,"name":"one","type":"Integer","initial":"1","random":"Non-generated","ranges":[]}],"preconditions":[{"parameterName":"remainingDigits","condition":"!=","value":"0"}],"setGenerate":[{"parameterName":"nonZeroEntered","setGen":"set","value":"true"}],"callLimit":0,"weight":100},{"name":"2","type":"Action","id":53,"parentId":6,"dx":120,"dy":160,"textX":15,"textY":22,"shapeWidth":80,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressNumber","fullName":"calculator.script:pressNumber","scriptPath":"applications/calculator.script:pressNumber","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"two","type":"Integer","initial":"2","random":"Non-generated","ranges":[]},"order":1}]},{"name":"decrementRemainingCount","fullName":"demo-calculator.script:decrementRemainingCount","scriptPath":"eai_logic/demo-calculator.script:decrementRemainingCount","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}],"outputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}]}],"parameters":[{"id":0,"name":"two","type":"Integer","initial":"2","random":"Non-generated","ranges":[]}],"preconditions":[{"parameterName":"remainingDigits","condition":"!=","value":"0"}],"setGenerate":[{"parameterName":"nonZeroEntered","setGen":"set","value":"true"}],"callLimit":0,"weight":100},{"name":"3","type":"Action","id":54,"parentId":6,"dx":220,"dy":160,"textX":15,"textY":22,"shapeWidth":80,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressNumber","fullName":"calculator.script:pressNumber","scriptPath":"applications/calculator.script:pressNumber","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"three","type":"Integer","initial":"3","random":"Non-generated","ranges":[]},"order":1}]},{"name":"decrementRemainingCount","fullName":"demo-calculator.script:decrementRemainingCount","scriptPath":"eai_logic/demo-calculator.script:decrementRemainingCount","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}],"outputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}]}],"parameters":[{"id":0,"name":"three","type":"Integer","initial":"3","random":"Non-generated","ranges":[]}],"preconditions":[{"parameterName":"remainingDigits","condition":"!=","value":"0"}],"setGenerate":[{"parameterName":"nonZeroEntered","setGen":"set","value":"true"}],"callLimit":0,"weight":100},{"name":".","type":"Action","id":55,"parentId":6,"dx":20,"dy":220,"textX":15,"textY":22,"shapeWidth":80,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressDecimalButton","fullName":"calculator.script:pressDecimalButton","scriptPath":"applications/calculator.script:pressDecimalButton","type":"normal"}],"parameters":[{"id":0,"name":"","type":"","initial":"","random":"","ranges":[]}],"preconditions":[],"setGenerate":[],"callLimit":1,"weight":10},{"name":"0","type":"Action","id":56,"parentId":6,"dx":120,"dy":220,"textX":15,"textY":22,"shapeWidth":80,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"pressNumber","fullName":"calculator.script:pressNumber","scriptPath":"applications/calculator.script:pressNumber","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"zero","type":"Integer","initial":"0","random":"Non-generated","ranges":[]},"order":1}]},{"name":"decrementRemainingCount","fullName":"demo-calculator.script:decrementRemainingCount","scriptPath":"eai_logic/demo-calculator.script:decrementRemainingCount","type":"normal","inputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}],"outputs":[{"parameterRef":{"id":0,"name":"remainingDigits","type":"Integer","initial":"","random":"Non-generated","ranges":[]},"order":2}]}],"parameters":[{"id":0,"name":"zero","type":"Integer","initial":"0","random":"Non-generated","ranges":[]}],"preconditions":[{"parameterName":"remainingDigits","condition":"!=","value":"0"}],"setGenerate":[],"callLimit":0,"weight":100},{"name":">>","type":"Action","id":57,"parentId":6,"dx":220,"dy":220,"textX":15,"textY":22,"shapeWidth":80,"shapeHeight":40,"actionType":"Normal","sortingType":"C","snippets":[{"name":"isDivisionPossible","fullName":"demo-calculator.script:isDivisionPossible","scriptPath":"eai_logic/demo-calculator.script:isDivisionPossible","type":"normal","inputs":[{"parameterRef":{"id":5,"name":"isDivisionPossible","type":"True or False","initial":"","random":"Non-generated","ranges":[]},"order":2},{"parameterRef":{"id":1,"name":"nonZeroEntered","type":"True or False","initial":"","random":"Generated","ranges":[{"values":"false","weight":100,"distribution":"Flat","numBins":"1"}]},"order":3}],"outputs":[{"parameterRef":{"id":5,"name":"isDivisionPossible","type":"True or False","initial":"","random":"Non-generated","ranges":[]},"order":2}]}],"parameters":[{"id":0,"name":"","type":"","initial":"","random":"","ranges":[]}],"preconditions":[],"connectedStates":[{"stateRef":7,"forceLabel":true}],"callLimit":0,"weight":100}],"testcases":[],"performanceTests":[],"tags":[{"name":"","values":"","id":1}],"version":"4.0.1"}
+{
+  "dai_version": "7.3.0-3-151221cb5d27b356e497169e4c8e8161d9858320",
+  "name": "demo-calculator",
+  "definition": {
+    "path": "",
+    "tags": [],
+    "version": "7.3.0-3",
+    "ePFsuite": "/Users/matt.brown/Projects/eggplant-demos/mbrown.suite",
+    "elements": [
+      {
+        "id": 0,
+        "name": "demo-calculator",
+        "type": "Root",
+        "parameters": [
+          {
+            "id": 1,
+            "name": "maxCalculations",
+            "type": "Integer",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "3",
+            "parameterUuid": "4c99e5f7-0ae1-48d7-a176-5b314522100a"
+          },
+          {
+            "id": 2,
+            "name": "maxDigits",
+            "type": "Integer",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "2",
+            "parameterUuid": "bfa67444-b0c1-4851-92d9-943441caa6cb"
+          },
+          {
+            "id": 3,
+            "name": "latestTotal",
+            "type": "Text",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "",
+            "parameterUuid": "d38c62f3-e79e-424a-ae6a-7994ca0f198a"
+          },
+          {
+            "id": 4,
+            "name": "isDivisionPossible",
+            "type": "True or False",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "",
+            "parameterUuid": "f238b486-017d-4b69-95ac-714f7ffe20a9"
+          }
+        ],
+        "elementUuid": "a0b2997b-36ba-4c39-8689-d35b5f18bef5"
+      },
+      {
+        "id": 1,
+        "name": "Exit",
+        "type": "State",
+        "parentId": 0,
+        "invisible": true,
+        "stateType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "",
+            "type": "",
+            "random": "",
+            "ranges": [],
+            "initial": "",
+            "parameterUuid": "bcf6b80b-5edb-4f25-80fa-43bf5caf0a77"
+          }
+        ],
+        "elementUuid": "c5b68528-70b7-4856-af35-690546325422",
+        "sortingType": "Z"
+      },
+      {
+        "id": 2,
+        "name": "Error",
+        "type": "State",
+        "parentId": 0,
+        "invisible": true,
+        "stateType": "Exception",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "",
+            "type": "",
+            "random": "",
+            "ranges": [],
+            "initial": "",
+            "parameterUuid": "e122a41e-f56f-4165-8679-d611da1e1a1d"
+          }
+        ],
+        "elementUuid": "7c1e5f8a-d0ad-41df-82b6-2b1be9cf1fd9",
+        "sortingType": "X"
+      },
+      {
+        "id": 3,
+        "name": "Cleanup",
+        "type": "State",
+        "parentId": 0,
+        "snippets": [],
+        "invisible": true,
+        "stateType": "Cleanup",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "",
+            "type": "",
+            "random": "",
+            "ranges": [],
+            "initial": "",
+            "parameterUuid": "924fb984-d0bd-4a11-8eb5-82ff407e0751"
+          }
+        ],
+        "elementUuid": "543a280e-757a-4cdf-be8c-88fbc70a4977",
+        "sortingType": "Y"
+      },
+      {
+        "dx": 20,
+        "dy": 20,
+        "id": 4,
+        "name": "Model Setup",
+        "type": "State",
+        "textX": 20,
+        "textY": 25,
+        "parentId": 0,
+        "invisible": false,
+        "stateType": "Start",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "",
+            "type": "",
+            "random": "",
+            "ranges": [],
+            "initial": "",
+            "parameterUuid": "f53cfe0e-b05e-4d99-b226-5387559ce5f3"
+          }
+        ],
+        "shapeWidth": 180,
+        "elementUuid": "e631d56d-375b-4f5f-9fc6-ca7ba52b2f07",
+        "shapeHeight": 160,
+        "sortingType": "A"
+      },
+      {
+        "dx": 20,
+        "dy": 200,
+        "id": 5,
+        "name": "Root",
+        "type": "State",
+        "textX": 20,
+        "textY": 25,
+        "parentId": 0,
+        "invisible": false,
+        "stateType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "isActiveEquation",
+            "type": "True or False",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "false",
+            "parameterUuid": "8a49eb48-64e5-4cbd-af9e-06ca3a36f89f"
+          }
+        ],
+        "shapeWidth": 160,
+        "description": "",
+        "elementUuid": "58b850bb-0879-4aa2-a7d0-52344584b44a",
+        "shapeHeight": 260,
+        "sortingType": "B"
+      },
+      {
+        "dx": 220,
+        "dy": 160,
+        "id": 6,
+        "name": "Numpad",
+        "type": "State",
+        "textX": 20,
+        "textY": 25,
+        "parentId": 0,
+        "snippets": [
+          {
+            "name": "setRemainingDigits",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 6,
+                "parameterRef": {
+                  "id": 2,
+                  "name": "maxDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "2",
+                  "parameterUuid": "bfa67444-b0c1-4851-92d9-943441caa6cb"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "order": 1,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "model.script:setRemainingDigits",
+            "scriptPath": "model.script:setRemainingDigits"
+          }
+        ],
+        "invisible": false,
+        "stateType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "remainingDigits",
+            "type": "Integer",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "",
+            "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+          },
+          {
+            "id": 1,
+            "name": "nonZeroEntered",
+            "type": "True or False",
+            "random": "Generated",
+            "ranges": [
+              {
+                "values": "false",
+                "weight": 100,
+                "numBins": "1",
+                "distribution": "Flat"
+              }
+            ],
+            "initial": "",
+            "parameterUuid": "579cd2cc-1d25-43eb-99a0-1eb892394084"
+          }
+        ],
+        "shapeWidth": 320,
+        "elementUuid": "62feb5f1-5274-40f0-9c78-0dca44d7f13d",
+        "shapeHeight": 300,
+        "sortingType": "B"
+      },
+      {
+        "dx": 560,
+        "dy": 20,
+        "id": 7,
+        "name": "Operators",
+        "type": "State",
+        "textX": 20,
+        "textY": 25,
+        "parentId": 0,
+        "invisible": false,
+        "stateType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "isOperatorSelected",
+            "type": "True or False",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "false",
+            "parameterUuid": "70a185e2-7291-432e-adec-0390f3e8f4dc"
+          }
+        ],
+        "shapeWidth": 120,
+        "elementUuid": "58083e09-51e0-4320-aacf-b8887b8fa6b2",
+        "shapeHeight": 440,
+        "sortingType": "B"
+      },
+      {
+        "dx": 220,
+        "dy": 20,
+        "id": 8,
+        "name": "OSD",
+        "type": "State",
+        "textX": 20,
+        "textY": 25,
+        "parentId": 0,
+        "invisible": false,
+        "stateType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "isValueExtracted",
+            "type": "True or False",
+            "random": "Generated",
+            "ranges": [
+              {
+                "values": "false",
+                "weight": 100,
+                "numBins": "1",
+                "distribution": "Flat"
+              }
+            ],
+            "initial": "",
+            "parameterUuid": "0c67797e-94cb-4d80-9a76-5be6c0e15955"
+          }
+        ],
+        "shapeWidth": 280,
+        "elementUuid": "97ac5cef-008c-4e58-b6c3-447fd3c83985",
+        "shapeHeight": 120,
+        "sortingType": "B"
+      },
+      {
+        "dx": 20,
+        "dy": 40,
+        "id": 34,
+        "name": "Verify Connection",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 4,
+        "snippets": [],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "",
+            "type": "",
+            "random": "",
+            "ranges": [],
+            "initial": "",
+            "parameterUuid": "e4e87993-b607-46ec-b5ab-92ef4d81f83d"
+          }
+        ],
+        "shapeWidth": 123,
+        "elementUuid": "b150c797-7582-4ecd-b256-0b323e3f5b43",
+        "setGenerate": [],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [],
+        "connectedStates": [
+          {
+            "stateRef": 35
+          }
+        ]
+      },
+      {
+        "dx": 20,
+        "dy": 100,
+        "id": 35,
+        "name": "Launch Calculator",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 4,
+        "snippets": [
+          {
+            "name": "closeProgram",
+            "type": "custom",
+            "disabled": false,
+            "fullName": "calculator.script:closeProgram",
+            "scriptPath": "calculator.script:closeProgram"
+          },
+          {
+            "name": "launchProgram",
+            "type": "custom",
+            "disabled": false,
+            "fullName": "calculator.script:launchProgram",
+            "scriptPath": "calculator.script:launchProgram"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Sequent",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "",
+            "type": "",
+            "random": "",
+            "ranges": [],
+            "initial": "",
+            "parameterUuid": "4eb42547-adfb-4cf0-bd78-5fd34ad4ad8f"
+          }
+        ],
+        "elementUuid": "7557def5-7f12-473a-aaa3-03ae55d215a3",
+        "sortingType": "C",
+        "preconditions": [],
+        "connectedStates": [
+          {
+            "stateRef": 5
+          }
+        ]
+      },
+      {
+        "dx": 20,
+        "dy": 120,
+        "id": 36,
+        "name": "New Equation",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 5,
+        "snippets": [
+          {
+            "name": "pressClearButton",
+            "type": "custom",
+            "disabled": false,
+            "fullName": "calculator.script:pressClearButton",
+            "scriptPath": "calculator.script:pressClearButton"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "",
+            "type": "",
+            "random": "",
+            "ranges": [],
+            "initial": "",
+            "parameterUuid": "94799ff3-32fe-43c0-b3f4-abb76217cd45"
+          }
+        ],
+        "shapeWidth": 97,
+        "elementUuid": "2749652b-99c5-489b-902f-94a9af799daf",
+        "setGenerate": [
+          {
+            "value": "true",
+            "setGen": "set",
+            "parameterName": "isActiveEquation"
+          },
+          {
+            "value": "true",
+            "setGen": "set",
+            "parameterName": "isDivisionPossible"
+          }
+        ],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "0",
+            "condition": "!=",
+            "parameterName": "maxCalculations"
+          }
+        ],
+        "connectedStates": [
+          {
+            "stateRef": 6
+          }
+        ]
+      },
+      {
+        "dx": 20,
+        "dy": 40,
+        "id": 37,
+        "name": "Continue Equation",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 5,
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "",
+            "type": "",
+            "random": "",
+            "ranges": [],
+            "initial": "",
+            "parameterUuid": "cf16f010-7be7-4cad-af6b-33b10119962d"
+          }
+        ],
+        "shapeWidth": 128,
+        "elementUuid": "61039996-349d-4007-8d26-24da8c352f63",
+        "setGenerate": [],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "true",
+            "condition": "==",
+            "parameterName": "isActiveEquation"
+          },
+          {
+            "value": "0",
+            "condition": "!=",
+            "parameterName": "maxCalculations"
+          }
+        ],
+        "connectedStates": [
+          {
+            "stateRef": 7,
+            "forceLabel": true
+          }
+        ]
+      },
+      {
+        "dx": 20,
+        "dy": 180,
+        "id": 38,
+        "name": "Close Calculator",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 5,
+        "parentId": 5,
+        "snippets": [
+          {
+            "name": "closeProgram",
+            "type": "custom",
+            "disabled": false,
+            "fullName": "calculator.script:closeProgram",
+            "scriptPath": "calculator.script:closeProgram"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "",
+            "type": "",
+            "random": "",
+            "ranges": [],
+            "initial": "",
+            "parameterUuid": "e0dc4a63-596b-4b30-a6b8-8ce64c861fee"
+          }
+        ],
+        "shapeWidth": 114,
+        "elementUuid": "4c02e799-df8d-4050-af17-af53ec34a978",
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "connectedStates": [
+          {
+            "stateRef": 1
+          }
+        ]
+      },
+      {
+        "dx": 20,
+        "dy": 40,
+        "id": 39,
+        "name": "Extract OSD Value",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 8,
+        "snippets": [
+          {
+            "name": "displayedValue",
+            "type": "custom",
+            "outputs": [
+              {
+                "order": 6,
+                "parameterRef": {
+                  "id": 3,
+                  "name": "latestTotal",
+                  "type": "Text",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "d38c62f3-e79e-424a-ae6a-7994ca0f198a"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "calculator.script:displayedValue",
+            "scriptPath": "calculator.script:displayedValue"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "",
+            "type": "",
+            "random": "",
+            "ranges": [],
+            "initial": "",
+            "parameterUuid": "edb02a50-98d9-4329-a8ff-ba4da23b67b6"
+          }
+        ],
+        "shapeWidth": 130,
+        "elementUuid": "1bd42d4e-3595-452f-826f-d4cefd6c6ef5",
+        "setGenerate": [
+          {
+            "value": "true",
+            "setGen": "set",
+            "parameterName": "isValueExtracted"
+          }
+        ],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "false",
+            "condition": "==",
+            "parameterName": "isValueExtracted"
+          }
+        ]
+      },
+      {
+        "dx": 180,
+        "dy": 40,
+        "id": 40,
+        "name": "Print Results",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 8,
+        "snippets": [
+          {
+            "name": "logToConsole",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 6,
+                "parameterRef": {
+                  "id": 3,
+                  "name": "latestTotal",
+                  "type": "Text",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "d38c62f3-e79e-424a-ae6a-7994ca0f198a"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "model.script:logToConsole",
+            "scriptPath": "model.script:logToConsole"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "",
+            "type": "",
+            "random": "",
+            "ranges": [],
+            "initial": "",
+            "parameterUuid": "03772594-b109-4606-a5af-80eeea4356af"
+          }
+        ],
+        "shapeWidth": 88,
+        "elementUuid": "d9d63310-1778-41ad-8e80-8f025c56dab0",
+        "setGenerate": [],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "true",
+            "condition": "==",
+            "parameterName": "isValueExtracted"
+          }
+        ],
+        "connectedStates": [
+          {
+            "stateRef": 5,
+            "forceLabel": true
+          }
+        ]
+      },
+      {
+        "dx": 20,
+        "dy": 40,
+        "id": 41,
+        "name": "DIVIDE",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 7,
+        "snippets": [
+          {
+            "name": "pressOperator",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 1,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "divide",
+                  "type": "Text",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "divide",
+                  "parameterUuid": "b80a6bd5-3bd3-465b-9976-cc934d23dcd1"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "calculator.script:pressOperator",
+            "scriptPath": "calculator.script:pressOperator"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "divide",
+            "type": "Text",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "divide",
+            "parameterUuid": "b80a6bd5-3bd3-465b-9976-cc934d23dcd1"
+          }
+        ],
+        "shapeWidth": 80,
+        "elementUuid": "429a0958-9117-4a9b-b49c-23988629d304",
+        "setGenerate": [],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "false",
+            "condition": "==",
+            "parameterName": "isOperatorSelected"
+          },
+          {
+            "value": "true",
+            "condition": "==",
+            "parameterName": "isDivisionPossible"
+          }
+        ],
+        "connectedStates": [
+          {
+            "stateRef": 6,
+            "forceLabel": true
+          }
+        ]
+      },
+      {
+        "dx": 20,
+        "dy": 120,
+        "id": 42,
+        "name": "MULTIPLY",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 7,
+        "snippets": [
+          {
+            "name": "pressOperator",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 1,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "multiply",
+                  "type": "Text",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "multiply",
+                  "parameterUuid": "ff876d7d-d73f-4aab-9662-35267ddc4ca2"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "calculator.script:pressOperator",
+            "scriptPath": "calculator.script:pressOperator"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "multiply",
+            "type": "Text",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "multiply",
+            "parameterUuid": "ff876d7d-d73f-4aab-9662-35267ddc4ca2"
+          }
+        ],
+        "shapeWidth": 80,
+        "elementUuid": "47be12da-08d6-4735-bd35-7718e0c3db6e",
+        "setGenerate": [
+          {
+            "value": "true",
+            "setGen": "set",
+            "parameterName": "isOperatorSelected"
+          }
+        ],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "false",
+            "condition": "==",
+            "parameterName": "isOperatorSelected"
+          }
+        ],
+        "connectedStates": [
+          {
+            "stateRef": 6,
+            "forceLabel": true
+          }
+        ]
+      },
+      {
+        "dx": 20,
+        "dy": 200,
+        "id": 43,
+        "name": "SUBTRACT",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 7,
+        "snippets": [
+          {
+            "name": "pressOperator",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 1,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "subtract",
+                  "type": "Text",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "subtract",
+                  "parameterUuid": "123b26e0-807d-42e1-85b8-511d4ed6bb2e"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "calculator.script:pressOperator",
+            "scriptPath": "calculator.script:pressOperator"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "subtract",
+            "type": "Text",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "subtract",
+            "parameterUuid": "123b26e0-807d-42e1-85b8-511d4ed6bb2e"
+          }
+        ],
+        "shapeWidth": 84,
+        "elementUuid": "07fc8abe-68d6-4816-a726-91c48886f527",
+        "setGenerate": [
+          {
+            "value": "true",
+            "setGen": "set",
+            "parameterName": "isOperatorSelected"
+          }
+        ],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "false",
+            "condition": "==",
+            "parameterName": "isOperatorSelected"
+          }
+        ],
+        "connectedStates": [
+          {
+            "stateRef": 6,
+            "forceLabel": true
+          }
+        ]
+      },
+      {
+        "dx": 20,
+        "dy": 280,
+        "id": 44,
+        "name": "ADD",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 7,
+        "snippets": [
+          {
+            "name": "pressOperator",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 1,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "add",
+                  "type": "Text",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "add",
+                  "parameterUuid": "f90c3eee-5f8a-4326-baa1-e6583da25f8c"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "calculator.script:pressOperator",
+            "scriptPath": "calculator.script:pressOperator"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "add",
+            "type": "Text",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "add",
+            "parameterUuid": "f90c3eee-5f8a-4326-baa1-e6583da25f8c"
+          }
+        ],
+        "shapeWidth": 80,
+        "elementUuid": "d79a8dee-df8c-40b4-8684-ae3258f2845a",
+        "setGenerate": [
+          {
+            "value": "true",
+            "setGen": "set",
+            "parameterName": "isOperatorSelected"
+          }
+        ],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "false",
+            "condition": "==",
+            "parameterName": "isOperatorSelected"
+          }
+        ],
+        "connectedStates": [
+          {
+            "stateRef": 6,
+            "forceLabel": true
+          }
+        ]
+      },
+      {
+        "dx": 20,
+        "dy": 360,
+        "id": 45,
+        "name": "EQUALS",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 7,
+        "snippets": [
+          {
+            "name": "pressOperator",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 1,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "equals",
+                  "type": "Text",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "equals",
+                  "parameterUuid": "8c3b9846-825c-4641-8001-5ac372fdc27a"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "calculator.script:pressOperator",
+            "scriptPath": "calculator.script:pressOperator"
+          },
+          {
+            "name": "decrementRemainingCount",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 4,
+                "parameterRef": {
+                  "id": 1,
+                  "name": "maxCalculations",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "3",
+                  "parameterUuid": "4c99e5f7-0ae1-48d7-a176-5b314522100a"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "order": 4,
+                "parameterRef": {
+                  "id": 1,
+                  "name": "maxCalculations",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "3",
+                  "parameterUuid": "4c99e5f7-0ae1-48d7-a176-5b314522100a"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "model.script:decrementRemainingCount",
+            "scriptPath": "model.script:decrementRemainingCount"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "equals",
+            "type": "Text",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "equals",
+            "parameterUuid": "8c3b9846-825c-4641-8001-5ac372fdc27a"
+          }
+        ],
+        "shapeWidth": 80,
+        "elementUuid": "25c681e6-47be-4a0e-94df-20e05a74ecb7",
+        "setGenerate": [
+          {
+            "value": "false",
+            "setGen": "set",
+            "parameterName": "isOperatorSelected"
+          }
+        ],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "true",
+            "condition": "==",
+            "parameterName": "isOperatorSelected"
+          }
+        ],
+        "connectedStates": [
+          {
+            "stateRef": 8,
+            "forceLabel": true
+          }
+        ]
+      },
+      {
+        "dx": 20,
+        "dy": 40,
+        "id": 46,
+        "name": "7",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 6,
+        "snippets": [
+          {
+            "name": "pressNumber",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 1,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "seven",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "7",
+                  "parameterUuid": "9df10974-6a9f-48b4-b5c0-6dae6b3715e1"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "calculator.script:pressNumber",
+            "scriptPath": "calculator.script:pressNumber"
+          },
+          {
+            "name": "decrementRemainingCount",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "model.script:decrementRemainingCount",
+            "scriptPath": "model.script:decrementRemainingCount"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "seven",
+            "type": "Integer",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "7",
+            "parameterUuid": "9df10974-6a9f-48b4-b5c0-6dae6b3715e1"
+          }
+        ],
+        "shapeWidth": 80,
+        "elementUuid": "19069afd-056b-4867-b5d3-456dccd1e2aa",
+        "setGenerate": [
+          {
+            "value": "true",
+            "setGen": "set",
+            "parameterName": "nonZeroEntered"
+          }
+        ],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "0",
+            "condition": "!=",
+            "parameterName": "remainingDigits"
+          }
+        ]
+      },
+      {
+        "dx": 120,
+        "dy": 40,
+        "id": 47,
+        "name": "8",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 6,
+        "snippets": [
+          {
+            "name": "pressNumber",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 1,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "eight",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "8",
+                  "parameterUuid": "72c1c203-6d94-46c9-9b31-577700b9d9a6"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "calculator.script:pressNumber",
+            "scriptPath": "calculator.script:pressNumber"
+          },
+          {
+            "name": "decrementRemainingCount",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "model.script:decrementRemainingCount",
+            "scriptPath": "model.script:decrementRemainingCount"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "eight",
+            "type": "Integer",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "8",
+            "parameterUuid": "72c1c203-6d94-46c9-9b31-577700b9d9a6"
+          }
+        ],
+        "shapeWidth": 80,
+        "elementUuid": "90f0e601-dd83-4e99-8df9-752e8326d269",
+        "setGenerate": [
+          {
+            "value": "true",
+            "setGen": "set",
+            "parameterName": "nonZeroEntered"
+          }
+        ],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "0",
+            "condition": "!=",
+            "parameterName": "remainingDigits"
+          }
+        ]
+      },
+      {
+        "dx": 220,
+        "dy": 40,
+        "id": 48,
+        "name": "9",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 6,
+        "snippets": [
+          {
+            "name": "pressNumber",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 1,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "nine",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "9",
+                  "parameterUuid": "ee5a0443-43c4-49d8-acfa-f4ee64f7c244"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "calculator.script:pressNumber",
+            "scriptPath": "calculator.script:pressNumber"
+          },
+          {
+            "name": "decrementRemainingCount",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "model.script:decrementRemainingCount",
+            "scriptPath": "model.script:decrementRemainingCount"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "nine",
+            "type": "Integer",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "9",
+            "parameterUuid": "ee5a0443-43c4-49d8-acfa-f4ee64f7c244"
+          }
+        ],
+        "shapeWidth": 80,
+        "elementUuid": "25074afa-1164-4849-90bc-a7c164dbef30",
+        "setGenerate": [
+          {
+            "value": "true",
+            "setGen": "set",
+            "parameterName": "nonZeroEntered"
+          }
+        ],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "0",
+            "condition": "!=",
+            "parameterName": "remainingDigits"
+          }
+        ]
+      },
+      {
+        "dx": 20,
+        "dy": 100,
+        "id": 49,
+        "name": "4",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 6,
+        "snippets": [
+          {
+            "name": "pressNumber",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 1,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "four",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "4",
+                  "parameterUuid": "c09f7fb5-d17b-4a73-b730-5e804cc45174"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "calculator.script:pressNumber",
+            "scriptPath": "calculator.script:pressNumber"
+          },
+          {
+            "name": "decrementRemainingCount",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "model.script:decrementRemainingCount",
+            "scriptPath": "model.script:decrementRemainingCount"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "four",
+            "type": "Integer",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "4",
+            "parameterUuid": "c09f7fb5-d17b-4a73-b730-5e804cc45174"
+          }
+        ],
+        "shapeWidth": 80,
+        "elementUuid": "f966e7cb-4013-471a-b1c7-d40bdebafdc2",
+        "setGenerate": [
+          {
+            "value": "true",
+            "setGen": "set",
+            "parameterName": "nonZeroEntered"
+          }
+        ],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "0",
+            "condition": "!=",
+            "parameterName": "remainingDigits"
+          }
+        ]
+      },
+      {
+        "dx": 120,
+        "dy": 100,
+        "id": 50,
+        "name": "5",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 6,
+        "snippets": [
+          {
+            "name": "pressNumber",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 1,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "five",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "5",
+                  "parameterUuid": "ffa58844-e4c9-4cf5-a66b-f92fc2b663f6"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "calculator.script:pressNumber",
+            "scriptPath": "calculator.script:pressNumber"
+          },
+          {
+            "name": "decrementRemainingCount",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "model.script:decrementRemainingCount",
+            "scriptPath": "model.script:decrementRemainingCount"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "five",
+            "type": "Integer",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "5",
+            "parameterUuid": "ffa58844-e4c9-4cf5-a66b-f92fc2b663f6"
+          }
+        ],
+        "shapeWidth": 80,
+        "elementUuid": "e7dca87d-0d13-4b5a-9e9a-777030f31d91",
+        "setGenerate": [
+          {
+            "value": "true",
+            "setGen": "set",
+            "parameterName": "nonZeroEntered"
+          }
+        ],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "0",
+            "condition": "!=",
+            "parameterName": "remainingDigits"
+          }
+        ]
+      },
+      {
+        "dx": 220,
+        "dy": 100,
+        "id": 51,
+        "name": "6",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 6,
+        "snippets": [
+          {
+            "name": "pressNumber",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 1,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "six",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "6",
+                  "parameterUuid": "f26e2d91-7131-4479-b298-2356cc557ffb"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "calculator.script:pressNumber",
+            "scriptPath": "calculator.script:pressNumber"
+          },
+          {
+            "name": "decrementRemainingCount",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "model.script:decrementRemainingCount",
+            "scriptPath": "model.script:decrementRemainingCount"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "six",
+            "type": "Integer",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "6",
+            "parameterUuid": "f26e2d91-7131-4479-b298-2356cc557ffb"
+          }
+        ],
+        "shapeWidth": 80,
+        "elementUuid": "d664e96e-71f9-49a1-a916-379d36a333ae",
+        "setGenerate": [
+          {
+            "value": "true",
+            "setGen": "set",
+            "parameterName": "nonZeroEntered"
+          }
+        ],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "0",
+            "condition": "!=",
+            "parameterName": "remainingDigits"
+          }
+        ]
+      },
+      {
+        "dx": 20,
+        "dy": 160,
+        "id": 52,
+        "name": "1",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 6,
+        "snippets": [
+          {
+            "name": "pressNumber",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 1,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "one",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "1",
+                  "parameterUuid": "7d57d532-f828-44da-b482-4df7be81df0e"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "calculator.script:pressNumber",
+            "scriptPath": "calculator.script:pressNumber"
+          },
+          {
+            "name": "decrementRemainingCount",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "model.script:decrementRemainingCount",
+            "scriptPath": "model.script:decrementRemainingCount"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "one",
+            "type": "Integer",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "1",
+            "parameterUuid": "7d57d532-f828-44da-b482-4df7be81df0e"
+          }
+        ],
+        "shapeWidth": 80,
+        "elementUuid": "8c7692ed-cf62-47db-9317-be110f88c093",
+        "setGenerate": [
+          {
+            "value": "true",
+            "setGen": "set",
+            "parameterName": "nonZeroEntered"
+          }
+        ],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "0",
+            "condition": "!=",
+            "parameterName": "remainingDigits"
+          }
+        ]
+      },
+      {
+        "dx": 120,
+        "dy": 160,
+        "id": 53,
+        "name": "2",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 6,
+        "snippets": [
+          {
+            "name": "pressNumber",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 1,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "two",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "2",
+                  "parameterUuid": "bccc29bb-63f6-45bd-9b53-249f426acf15"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "calculator.script:pressNumber",
+            "scriptPath": "calculator.script:pressNumber"
+          },
+          {
+            "name": "decrementRemainingCount",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "model.script:decrementRemainingCount",
+            "scriptPath": "model.script:decrementRemainingCount"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "two",
+            "type": "Integer",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "2",
+            "parameterUuid": "bccc29bb-63f6-45bd-9b53-249f426acf15"
+          }
+        ],
+        "shapeWidth": 80,
+        "elementUuid": "f0a6e2a0-ea1b-44d8-9b0a-c11a12d9d7bd",
+        "setGenerate": [
+          {
+            "value": "true",
+            "setGen": "set",
+            "parameterName": "nonZeroEntered"
+          }
+        ],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "0",
+            "condition": "!=",
+            "parameterName": "remainingDigits"
+          }
+        ]
+      },
+      {
+        "dx": 220,
+        "dy": 160,
+        "id": 54,
+        "name": "3",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 6,
+        "snippets": [
+          {
+            "name": "pressNumber",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 1,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "three",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "3",
+                  "parameterUuid": "0662e8e2-a634-4082-91ab-21c2a9aaaa1a"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "calculator.script:pressNumber",
+            "scriptPath": "calculator.script:pressNumber"
+          },
+          {
+            "name": "decrementRemainingCount",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "model.script:decrementRemainingCount",
+            "scriptPath": "model.script:decrementRemainingCount"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "three",
+            "type": "Integer",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "3",
+            "parameterUuid": "0662e8e2-a634-4082-91ab-21c2a9aaaa1a"
+          }
+        ],
+        "shapeWidth": 80,
+        "elementUuid": "54078be4-3052-47fa-8517-1f38edaaf417",
+        "setGenerate": [
+          {
+            "value": "true",
+            "setGen": "set",
+            "parameterName": "nonZeroEntered"
+          }
+        ],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "0",
+            "condition": "!=",
+            "parameterName": "remainingDigits"
+          }
+        ]
+      },
+      {
+        "dx": 20,
+        "dy": 220,
+        "id": 55,
+        "name": ".",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 10,
+        "parentId": 6,
+        "snippets": [
+          {
+            "name": "pressDecimalButton",
+            "type": "custom",
+            "disabled": false,
+            "fullName": "calculator.script:pressDecimalButton",
+            "scriptPath": "calculator.script:pressDecimalButton"
+          }
+        ],
+        "callLimit": 1,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "",
+            "type": "",
+            "random": "",
+            "ranges": [],
+            "initial": "",
+            "parameterUuid": "a770db3a-8678-485b-b8d0-146dce3a1631"
+          }
+        ],
+        "shapeWidth": 80,
+        "elementUuid": "23f64465-0d97-43ad-857f-d658200b48a2",
+        "setGenerate": [],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": []
+      },
+      {
+        "dx": 120,
+        "dy": 220,
+        "id": 56,
+        "name": "0",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 6,
+        "snippets": [
+          {
+            "name": "pressNumber",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 1,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "zero",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "0",
+                  "parameterUuid": "7d23aa30-f8fa-49b6-b8eb-88f1f29f8589"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "calculator.script:pressNumber",
+            "scriptPath": "calculator.script:pressNumber"
+          },
+          {
+            "name": "decrementRemainingCount",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 0,
+                  "name": "remainingDigits",
+                  "type": "Integer",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "a65ed032-8eaa-48cc-802a-9be47219c59d"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "model.script:decrementRemainingCount",
+            "scriptPath": "model.script:decrementRemainingCount"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "zero",
+            "type": "Integer",
+            "random": "Non-generated",
+            "ranges": [],
+            "initial": "0",
+            "parameterUuid": "7d23aa30-f8fa-49b6-b8eb-88f1f29f8589"
+          }
+        ],
+        "shapeWidth": 80,
+        "elementUuid": "eaf42c94-a75a-4ea2-bd2e-7bb267387e13",
+        "setGenerate": [],
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [
+          {
+            "value": "0",
+            "condition": "!=",
+            "parameterName": "remainingDigits"
+          }
+        ]
+      },
+      {
+        "dx": 220,
+        "dy": 220,
+        "id": 57,
+        "name": ">>",
+        "type": "Action",
+        "textX": 15,
+        "textY": 22,
+        "weight": 100,
+        "parentId": 6,
+        "snippets": [
+          {
+            "name": "isDivisionPossible",
+            "type": "custom",
+            "inputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 4,
+                  "name": "isDivisionPossible",
+                  "type": "True or False",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "f238b486-017d-4b69-95ac-714f7ffe20a9"
+                }
+              },
+              {
+                "order": 3,
+                "parameterRef": {
+                  "id": 1,
+                  "name": "nonZeroEntered",
+                  "type": "True or False",
+                  "random": "Generated",
+                  "ranges": [
+                    {
+                      "values": "false",
+                      "weight": 100,
+                      "numBins": "1",
+                      "distribution": "Flat"
+                    }
+                  ],
+                  "initial": "",
+                  "parameterUuid": "579cd2cc-1d25-43eb-99a0-1eb892394084"
+                }
+              }
+            ],
+            "outputs": [
+              {
+                "order": 2,
+                "parameterRef": {
+                  "id": 4,
+                  "name": "isDivisionPossible",
+                  "type": "True or False",
+                  "random": "Non-generated",
+                  "ranges": [],
+                  "initial": "",
+                  "parameterUuid": "f238b486-017d-4b69-95ac-714f7ffe20a9"
+                }
+              }
+            ],
+            "disabled": false,
+            "fullName": "model.script:isDivisionPossible",
+            "scriptPath": "model.script:isDivisionPossible"
+          }
+        ],
+        "callLimit": 0,
+        "actionType": "Normal",
+        "parameters": [
+          {
+            "id": 0,
+            "name": "",
+            "type": "",
+            "random": "",
+            "ranges": [],
+            "initial": "",
+            "parameterUuid": "819133e7-952a-42e3-9451-94406dc5f36e"
+          }
+        ],
+        "shapeWidth": 80,
+        "elementUuid": "39428329-c982-412d-8139-e8467e9aa6da",
+        "shapeHeight": 40,
+        "sortingType": "C",
+        "preconditions": [],
+        "connectedStates": [
+          {
+            "stateRef": 7,
+            "forceLabel": true
+          }
+        ]
+      }
+    ],
+    "modeluuid": "bb418313-70fd-4ddc-a791-c08b804f7981",
+    "suitePath": "calculator.suite",
+    "stateCounter": 9,
+    "actionCounter": 48,
+    "parameterCounter": 65,
+    "runCleanupAfterAbort": true,
+    "allowGlobalActionsInInitialStates": false
+  },
+  "test_cases": [
+    {
+      "name": "Addition-1d_plus_1d",
+      "description": "",
+      "origin": "",
+      "external_id": "",
+      "tags": [],
+      "type": "DIRECTED",
+      "steps": [
+        {
+          "action_id": "b150c797-7582-4ecd-b256-0b323e3f5b43",
+          "submodel_test_case_id": null,
+          "parameters": []
+        },
+        {
+          "action_id": "7557def5-7f12-473a-aaa3-03ae55d215a3",
+          "submodel_test_case_id": null,
+          "parameters": []
+        },
+        {
+          "action_id": "2749652b-99c5-489b-902f-94a9af799daf",
+          "submodel_test_case_id": null,
+          "parameters": []
+        },
+        {
+          "action_id": "f966e7cb-4013-471a-b1c7-d40bdebafdc2",
+          "submodel_test_case_id": null,
+          "parameters": [
+            {
+              "value": "",
+              "name": null,
+              "parameter_id": "579cd2cc-1d25-43eb-99a0-1eb892394084"
+            }
+          ]
+        },
+        {
+          "action_id": "39428329-c982-412d-8139-e8467e9aa6da",
+          "submodel_test_case_id": null,
+          "parameters": []
+        },
+        {
+          "action_id": "d79a8dee-df8c-40b4-8684-ae3258f2845a",
+          "submodel_test_case_id": null,
+          "parameters": []
+        },
+        {
+          "action_id": "54078be4-3052-47fa-8517-1f38edaaf417",
+          "submodel_test_case_id": null,
+          "parameters": [
+            {
+              "value": "",
+              "name": null,
+              "parameter_id": "579cd2cc-1d25-43eb-99a0-1eb892394084"
+            }
+          ]
+        },
+        {
+          "action_id": "39428329-c982-412d-8139-e8467e9aa6da",
+          "submodel_test_case_id": null,
+          "parameters": []
+        },
+        {
+          "action_id": "25c681e6-47be-4a0e-94df-20e05a74ecb7",
+          "submodel_test_case_id": null,
+          "parameters": []
+        },
+        {
+          "action_id": "1bd42d4e-3595-452f-826f-d4cefd6c6ef5",
+          "submodel_test_case_id": null,
+          "parameters": [
+            {
+              "value": "",
+              "name": null,
+              "parameter_id": "0c67797e-94cb-4d80-9a76-5be6c0e15955"
+            }
+          ]
+        },
+        {
+          "action_id": "d9d63310-1778-41ad-8e80-8f025c56dab0",
+          "submodel_test_case_id": null,
+          "parameters": []
+        },
+        {
+          "action_id": "4c02e799-df8d-4050-af17-af53ec34a978",
+          "submodel_test_case_id": null,
+          "parameters": []
+        }
+      ],
+      "id": "f7e01664-71b9-4d5f-8883-24a70c70eaf2",
+      "model_id": "bb418313-70fd-4ddc-a791-c08b804f7981"
+    }
+  ]
+}

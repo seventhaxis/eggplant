@@ -1,25 +1,24 @@
-﻿set the duplicatePropertyKeyMode to error
-set the strictProperties to true
-
+﻿put "system/" into sysPath
+put sysPath & "buttons/" into sysButtonPath
 put "calculator/" into calcPath
-put "system/" into sysPath
+put calcPath & "buttons/" into calcButtonPath
+put calcPath & "tabs/" into calcTabPath
 
 set images to {
 
 	### CALCULATOR
-	calc_clear_btn: calcPath & "clear_button",
-	calc_decimal_btn: calcPath & "decimal_button",
-	calc_history_btn: calcPath & "history_button",
-	calc_history_tab: calcPath & "history_tab",
-	calc_memstore_btn: calcPath & "memory_store_button",
-	calc_menu_btn: calcPath & "menu_button",
-	calc_numpad: calcPath & "numpad",
-	calc_operators: calcPath & "operators",
+	calc_clear_btn: calcButtonPath & "clear",
+	calc_decimal_btn: calcButtonPath & "decimal",
+	calc_history_tab: calcTabPath & "history",
+	calc_memstore_btn: calcButtonPath & "mem_store",
+	calc_menu_btn: calcButtonPath & "menu",
+	calc_numpad: calcButtonPath & "numpad",
+	calc_operators: calcButtonPath & "operators",
 	
 	### OPERATING SYSTEM
-	sys_close_window_btn: sysPath & "close_window_button",
-	sys_max_window_btn: sysPath & "maximize_window_button",
-	sys_restore_window_btn: sysPath & "restore_window_button",
+	sys_close_window_btn: sysButtonPath & "close_window",
+	sys_max_window_btn: sysButtonPath & "maximize_window",
+	sys_restore_window_btn: sysButtonPath & "restore_window",
 	sys_taskbar_icon: sysPath & "taskbar_icon",
 
 }
@@ -28,9 +27,19 @@ return images
 
 
 function forKey imgKey
+	put the duplicatePropertyKeyMode into origDPKM
+	put the strictProperties into origSP
+	set the duplicatePropertyKeyMode to error
+	set the strictProperties to true
+	
 	put imgPath().(imgKey) into imagePath
-	if the last character of imagePath is "/" then return imagePath
-	else return imagePath & "/"
+	if the last character of imagePath is NOT "/"
+		put imagePath & "/" into imagePath
+	end if
+	
+	set the duplicatePropertyKeyMode to origDPKM
+	set the strictProperties to origSP
+	return imagePath
 end forKey
 
 
@@ -41,6 +50,7 @@ end forNumber
 
 
 function forOperator op
-	assert that ["divide", "multiply", "subtract", "add", "equals"] contains op
-	return imgPath.forKey("calc_operators") & op & "/"
+	put lowercase(op) into lc_op
+	assert that ["divide", "multiply", "subtract", "add", "equals"] contains lc_op
+	return imgPath.forKey("calc_operators") & lc_op & "/"
 end forOperator

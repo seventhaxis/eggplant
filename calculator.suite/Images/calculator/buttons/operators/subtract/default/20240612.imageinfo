@@ -1,0 +1,19 @@
+﻿{
+    CaptureDate = "2024-06-12 17:43:09 +0000";
+    CaptureHost = "Unraid: Windows 10 VM";
+    CaptureScreenSize = (
+        1920,
+        1080);
+    HasAlpha = 1;
+    HotSpotX = 75;
+    HotSpotY = 28;
+    LastKnownLocationX = 0;
+    LastKnownLocationY = 0;
+    OriginalLocationX = 1323;
+    OriginalLocationY = 726;
+    Precise = 0;
+    Pulsing = 0;
+    Scale = 1;
+    SearchObjectName = "calculator/buttons/operators/subtract/default/20240612";
+    tags = ();
+}

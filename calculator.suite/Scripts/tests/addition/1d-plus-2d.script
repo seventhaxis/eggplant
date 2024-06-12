@@ -1,0 +1,15 @@
+﻿// The aim of this test is to ensure suite alignment with the target SUT for the purpose of EAI executions.
+-- Prerequisite: connected to a standardized Windows 10 instance
+
+# Close any open instance(s) and launch a fresh program.
+calculator.closeProgram
+calculator.launchProgram
+
+# Ensures calculator clear button works properly while resetting program to known initial state.
+calculator.pressClearButton
+assert that calculator.displayedValue() equals zero
+
+# Demonstrates ability to validate on-screen results with expected calculated results.
+assert that calculator.addedTo(72, 6) equals 78
+
+calculator.closeProgram

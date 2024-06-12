@@ -1,19 +1,10 @@
-﻿set the duplicatePropertyKeyMode to error
-set the strictProperties to true
-
-set systems to {
+﻿set systems to {
 
 	### INTRANET
 	unraid_windows: {
 		serverID: "192.168.7.202",
-		portNum: 5901,
-		password: getVaultValue("unraid_windows_password"),
-		type: "VNC",
-	},
-	unraid_ubuntu: {
-		serverID: "192.168.7.202",
 		portNum: 5900,
-		password: getVaultValue("unraid_ubuntu_password"),
+		password: getVaultValue("unraid_windows_password"),
 		type: "VNC",
 	},
 }
@@ -24,23 +15,21 @@ return systems
 # Returns the value associated with defined key.
 -- Example: log savedSUTs.forKey(unraid_windows)
 function forKey systemShortname
-	return savedSUTs().(systemShortname)
+	put the duplicatePropertyKeyMode into origDPKM
+	put the strictProperties into origSP
+	set the duplicatePropertyKeyMode to error
+	set the strictProperties to true
+	
+	put savedSUTs().(systemShortname) into targetSUT
+	set the duplicatePropertyKeyMode to origDPKM
+	set the strictProperties to origSP
+	return targetSUT
 end forKey
 
 
 # Establishes connection to saved SUT via shortname.
 -- Example: savedSUTs.connectTo(unraid_windows)
--- Example: savedSUTs.connectTo(unraid_ubuntu)
 on connectTo systemShortname
 	put savedSUTs.forKey(systemShortname) into targetSystem
 	connect targetSystem
 end connectTo
-
-
-# Connects ONLY if there is no active connection. Useful when designing model.
--- Example: savedSUTs.connectIfNoConnection(unraid_windows)
-on connectIfNoConnection systemShortname
-	put connectionInfo() into currentConnectionInfo
-	if currentConnectionInfo is empty then savedSUTs.connectTo(systemShortname)
-	else logWarning !"There is currently an active [[currentConnectionInfo.Type]] connection to host '[[currentConnectionInfo.ServerID]]:[[currentConnectionInfo.PortNum]]'."
-end connectIfNoConnection

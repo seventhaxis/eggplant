@@ -90,13 +90,22 @@ end enterNumber
 -- Prerequisite: program is closed and icon is pinned to taskbar
 on launchProgram
 	clickInactiveTaskbarIcon
-	
-	put imgPath.forKey("calc_history_btn") into historyButton
-	if NOT imageFound(image: historyButton, waitFor: 0) OR if programWidth() does NOT equal 342
-	then resizeProgramWindow
-	
-	restrictSearchRectangleToProgramWindow
+	maximizeWindowIfNecessary
 end launchProgram
+
+on maximizeWindowIfNecessary
+	put remoteScreenSize() into rss
+	put rss * [0.85, 0] into topLeftAnchor
+	put rss * [1, 0.15] into botRightAnchor
+	put [topLeftAnchor, botRightAnchor] into topRightCornerRect
+	put imgPath.forKey("sys_restore_window_btn") into restoreWindowButton
+	
+	if NOT imageFound(image: restoreWindowButton, waitFor: 10)
+		put imgPath.forKey("sys_max_window_btn") into maximizeWindowButton
+		click maximizeWindowButton
+		assert that imageFound(image: restoreWindowButton, waitFor: 10, searchRectangle: topRightCornerRect)
+	end if
+end maximizeWindowIfNecessary
 
 
 function multipliedBy xInt, yInt
@@ -145,111 +154,16 @@ on pressOperator targetOperator
 end pressOperator
 
 
-function programWidth
-	// two-element validation to ensure calculator appears on-screen
-	put imgPath.forKey("calc_menu_btn") into menuButton
-	put imageLocation(image: menuButton, waitFor: 5) into menuButtonLocation
-	
-	put imgPath.forKey("calc_memstore_btn") into memoryButton
-	put imageFound(image: memoryButton, waitFor: 0) into memoryButtonLocation
-	
-	return (memoryButtonLocation.x - menuButtonLocation.x)
-end programWidth
-
-
-// Resizes calculator program to reduce test failures due to scaling mismatches.
-on resizeProgramWindow
-	restoreProgramWindow
-	
-	put imgPath.forKey("sys_close_window_btn") into closeButton
-	put imageLocation(closeButton) into closeButtonLoc
-	
-	// find the right-side of program by looking for History tab
-	put imgPath.forKey("calc_history_tab") into historyTab
-	if imageFound(image: historyTab, waitFor: 0) // use close button as reference
-		put closeButtonLoc + [25, 50] into rightEdge
-	else	 // use history button as reference
-		put imgPath.forKey("calc_history_btn") into historyButton
-		put imageLocation(historyButton) + [20, 0] into rightEdge
-	end if
-	
-	// if necessary, drag right edge to proper width
-	put imgPath.forKey("calc_menu_btn") into menuButton
-	put imageLocation(menuButton) into menuButtonLoc
-	if [rightEdge.x - menuButtonLoc.x] is NOT equal to 535
-		put [menuButtonLoc.x + 535, rightEdge.y] into desiredWidth
-		drag rightEdge
-		drop desiredWidth
-	end if
-	
-	// get current location for title bar
-	put imageLocation(closeButton) into closeButtonLoc
-	put closeButtonLoc + [-200, 0] into titleBarLoc
-	
-	// store location of draggable top edge of program
-	put imageRectangle(closeButton).topLeft + [-100, 0] into topEdge
-	put [remoteScreenSize().x / 2, 100] into topMiddle
-	
-	put imgPath.forNumber(0) into numpadZero
-	put imageLocation(image: numpadZero, waitFor: 0) into numpadZeroLoc
-	if numpadZeroLoc.y is NOT 950 // reposition according to zero button's location
-		put 950 - numpadZeroLoc.y into deltaV
-		put [topMiddle.x, topEdge.y + deltaV] into desiredtitleBarLoc
-		drag titleBarLoc
-		drop desiredtitleBarLoc
-		
-		put imageRectangle(closeButton).topLeft + [-100, 0] into topEdge
-		put imageLocation(image: numpadZero, waitFor: 0) into numpadZeroLoc
-	end if
-	
-	put [topEdge.x, numpadZeroLoc.y - 800] into desiredHeight
-	drag topEdge
-	drop desiredHeight
-end resizeProgramWindow
-
-
-// Restores calculator window (if possible).
-on restoreProgramWindow
-	put remoteScreenSize() into screenResolution
-	put [screenResolution.x * 11/12, 0] into topLeftAnchor
-	put [screenResolution.x, 50] into bottomRightAnchor
-	put [topLeftAnchor, bottomRightAnchor] into topRightCorner
-
-	put imgPath.forKey("sys_restore_window_btn") into restoreWindowButton
-	if imageFound(image: restoreWindowButton, searchRectangle: topRightCorner, waitFor: 3)
-	then click foundImageLocation()
-	
-	put imgPath.forKey("sys_max_window_btn") into maximizeWindowButton
-	assert that imageFound(image: maximizeWindowButton, waitFor: 5)
-end restoreProgramWindow
-
-
-// Sets the global searchRectangle property to rectangle for calculator program window.
-on restrictSearchRectangleToProgramWindow
-	logWarning "TODO: This should be changed to return a rectangle instead of using global property."
-	
-	put imageLocation(text: "Calculator", caseSensitive: yes) into titleBarLocation
-	put titleBarLocation + [-35, -15] into topLeftAnchor
-	put imgPath.forKey("sys_close_window_btn") into closeWindowButton
-	put imageLocation(closeWindowButton).x + 20 into rightAnchor
-	put imgPath.forOperator("equals") into equalsButton
-	put imageLocation(equalsButton).y + 45 into bottomAnchor
-	put [rightAnchor, bottomAnchor] into bottomRightAnchor
-	
-	set the searchRectangle to [topLeftAnchor, bottomRightAnchor]
-end restrictSearchRectangleToProgramWindow
-
-
 // Returns a rectangle for the calculator's output area to be used in readText() calls.
 function resultsRectangle
 	if global resultsRectangle is empty
 		put imgPath.forKey("calc_menu_btn") into menuButton
-		put imageLocation(menuButton) + [-15, 50] into topLeftAnchor
+		put imageLocation(menuButton) + [-15, 80] into topLeftAnchor
 
-		put imgPath.forKey("calc_history_btn") into historyButton
-		put imageRectangle(historyButton).right into rightAnchor
+		put imgPath.forKey("calc_history_tab") into historyButton
+		put imageRectangle(historyButton).left into rightAnchor
 		put imgPath.forKey("calc_memstore_btn") into memoryStoreButton
-		put imageRectangle(memoryStoreButton).top - 10 into bottomAnchor
+		put imageRectangle(memoryStoreButton).top - 30 into bottomAnchor
 		put [rightAnchor, bottomAnchor] into bottomRightAnchor
 
 		put [topLeftAnchor, bottomRightAnchor] into global resultsRectangle
